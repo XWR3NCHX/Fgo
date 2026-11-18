@@ -7,162 +7,155 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
+
+  <!-- HEADER IDENTIQUE AU SITE D'ARTÉFACTS -->
+  <header class="site-header">
     <div class="brand">
       <a href="../index.html" class="back-link">← Accueil</a>
-      <h1>Fate/Grand Order <span class="badge">NA</span></h1>
+      <div class="brand-mark">✦</div>
+      <div>
+        <p class="eyebrow">FATE/GRAND ORDER NA</p>
+        <h1>Bibliothèque & Bond Tracker</h1>
+      </div>
     </div>
     <nav class="tabs" role="tablist">
-      <button class="tab-btn active" data-tab="farm">📦 Farm Matériaux</button>
-      <button class="tab-btn" data-tab="training">⚔️ Training Ground</button>
-      <button class="tab-btn" data-tab="bond">💎 Bond Level</button>
-      <button class="tab-btn" data-tab="planning">📅 Events & Bannières 2026</button>
-      <button class="tab-btn" data-tab="grand">👑 Grand Servants</button>
+      <button class="tab active" data-tab="bond">💎 Bond Level</button>
+      <button class="tab" data-tab="farm">📦 Farm Matériaux</button>
+      <button class="tab" data-tab="training">⚔️ Training Ground</button>
+      <button class="tab" data-tab="planning">📅 2026</button>
+      <button class="tab" data-tab="grand">👑 Grand Servants</button>
     </nav>
   </header>
 
-  <main class="container">
-    <!-- ONGLET 1 : FARM -->
-    <section id="tab-farm" class="tab-panel active">
-      <div class="controls">
-        <input type="text" id="farm-search" placeholder="Rechercher un matériau (ex: Proof of Hero, Evil Bone, Dragon Fang...)" />
-        <select id="farm-rarity">
-          <option value="all">Toutes raretés</option>
-          <option value="bronze">Bronze (A3xx)</option>
-          <option value="silver">Argent (A2xx)</option>
-          <option value="gold">Or (A1xx)</option>
-        </select>
-      </div>
-      <div id="farm-grid" class="cards-grid"></div>
-    </section>
-
-    <!-- ONGLET 2 : TRAINING GROUND -->
-    <section id="tab-training" class="tab-panel">
-      <h2>Rotation Hebdomadaire & Coût en Gemmes</h2>
-      <div class="card">
-        <h3>📅 Planning des Classes (Training Ground)</h3>
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Lundi</th>
-                <th>Mardi</th>
-                <th>Mercredi</th>
-                <th>Jeudi</th>
-                <th>Vendredi</th>
-                <th>Samedi</th>
-                <th>Dimanche</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Archer</td>
-                <td>Lancer</td>
-                <td>Berserker <br><small>+ All</small></td>
-                <td>Rider <br><small>+ All</small></td>
-                <td>Caster</td>
-                <td>Assassin</td>
-                <td>Saber</td>
-              </tr>
-            </tbody>
-          </table>
+  <main>
+    <!-- ONGLET 3 : BOND LEVEL (Le principal demandé) -->
+    <section id="tab-bond" class="view tab-panel active">
+      <div class="intro">
+        <div>
+          <h2>Suivi des Bond Levels</h2>
+          <p class="muted">Sélectionne tes Servants, gère leurs priorités et coche leur Bond Max.</p>
+        </div>
+        <div class="stat-card">
+          <span id="stat-max">0</span>
+          <small>Bond Max</small>
         </div>
       </div>
 
-      <div class="card">
-        <h3>💎 Gemmes requises par Servant (3 Skills)</h3>
-        <div class="table-responsive">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Type de Gemme</th>
-                <th>1★</th>
-                <th>2★</th>
-                <th>3★</th>
-                <th>4★</th>
-                <th>5★</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>🔵 Gem (Bleue)</td><td>18</td><td>27</td><td>36</td><td>42</td><td>51</td></tr>
-              <tr><td>🔴 Magic Gem (Rouge)</td><td>18</td><td>27</td><td>36</td><td>42</td><td>51</td></tr>
-              <tr><td>🟡 Secret Gem (Or)</td><td>18</td><td>27</td><td>36</td><td>42</td><td>51</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ONGLET 3 : BOND LEVEL (Style Artéfacts sélectifs) -->
-    <section id="tab-bond" class="tab-panel">
-      <div class="stats-bar" id="bond-stats"></div>
-      
-      <!-- Formulaire d'ajout de Servant -->
-      <div class="card add-servant-card">
-        <h3>➕ Ajouter un nouveau Servant</h3>
-        <form id="add-servant-form" class="controls" style="margin-top: 1rem; margin-bottom: 0;">
-          <input type="text" id="new-servant-name" placeholder="Nom du Servant..." required />
-          <select id="new-servant-class" required>
-            <option value="">Sélectionner la classe</option>
-            <option value="Saber">Saber</option>
-            <option value="Archer">Archer</option>
-            <option value="Lancer">Lancer</option>
-            <option value="Rider">Rider</option>
-            <option value="Caster">Caster</option>
-            <option value="Assassin">Assassin</option>
-            <option value="Berserker">Berserker</option>
-            <option value="Ruler">Ruler</option>
-            <option value="Avenger">Avenger</option>
-            <option value="Alter Ego">Alter Ego</option>
-            <option value="Moon Cancer">Moon Cancer</option>
-            <option value="Pretender">Pretender</option>
-            <option value="Foreigner">Foreigner</option>
-            <option value="Beast">Beast</option>
-          </select>
-          <select id="new-servant-prio">
-            <option value="Priorité 1">Priorité 1</option>
-            <option value="Priorité 2">Priorité 2</option>
-            <option value="Priorité 3">Priorité 3</option>
-            <option value="En attente">En attente</option>
-          </select>
-          <button type="submit" class="tab-btn active" style="padding: 0.7rem 1.5rem;">Ajouter</button>
+      <!-- FORMULAIRE D'AJOUT -->
+      <div class="card" style="margin-bottom: 24px;">
+        <h3 style="margin-top:0; color:var(--gold); font-size:1.1rem; margin-bottom:12px;">➕ Ajouter un nouveau Servant</h3>
+        <form id="add-servant-form" class="toolbar" style="margin-bottom:0;">
+          <div class="search-box">
+            <input type="text" id="new-servant-name" placeholder="Nom du Servant (ex: Artoria, Castoria...)" required />
+          </div>
+          <div class="filter-label">
+            <span>Classe :</span>
+            <select id="new-servant-class" required>
+              <option value="Saber">Saber</option>
+              <option value="Archer">Archer</option>
+              <option value="Lancer">Lancer</option>
+              <option value="Rider">Rider</option>
+              <option value="Caster">Caster</option>
+              <option value="Assassin">Assassin</option>
+              <option value="Berserker">Berserker</option>
+              <option value="Ruler">Ruler</option>
+              <option value="Avenger">Avenger</option>
+              <option value="Alter Ego">Alter Ego</option>
+              <option value="Moon Cancer">Moon Cancer</option>
+              <option value="Pretender">Pretender</option>
+              <option value="Foreigner">Foreigner</option>
+            </select>
+          </div>
+          <div class="filter-label">
+            <span>Priorité :</span>
+            <select id="new-servant-prio">
+              <option value="Priorité 1">Priorité 1</option>
+              <option value="Priorité 2">Priorité 2</option>
+              <option value="Priorité 3">Priorité 3</option>
+              <option value="En attente">En attente</option>
+            </select>
+          </div>
+          <button type="submit" class="button">Ajouter</button>
         </form>
       </div>
 
-      <div class="controls">
-        <input type="text" id="bond-search" placeholder="Rechercher un Servant ou une classe..." />
+      <!-- BARRE DE RECHERCHE -->
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="bond-search" placeholder="Rechercher par nom ou par classe..." />
+        </div>
+        <div class="filter-label">
+          <span>Filtrer :</span>
+          <select id="bond-filter">
+            <option value="all">Tous</option>
+            <option value="todo">À faire / Prioritaires</option>
+            <option value="max">Bond Max</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Grille interactive de Servants (Style sélectif type Artéfacts) -->
-      <div id="bond-grid" class="cards-grid"></div>
+      <!-- GRILLE DE CARTES (Style artéfacts) -->
+      <div id="bond-grid" class="artifact-grid"></div>
     </section>
 
-    <!-- ONGLET 4 : EVENTS & BANNIÈRES 2026 -->
-    <section id="tab-planning" class="tab-panel">
-      <div class="gallery-grid">
-        <div class="card">
-          <h3>🗓️ Roadmap Events NA 2026</h3>
-          <img src="assets/event-2026.png" alt="Roadmap Events FGO NA 2026" />
+    <!-- ONGLET 1 : FARM -->
+    <section id="tab-farm" class="view tab-panel">
+      <div class="intro">
+        <div>
+          <h2>Catalogue de Farm</h2>
+          <p class="muted">Optimise tes routes de matériaux.</p>
         </div>
-        <div class="card">
-          <h3>✨ Calendrier des Bannières NA 2026</h3>
-          <img src="assets/banniere-2026.png" alt="Bannières FGO NA 2026" />
+      </div>
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="farm-search" placeholder="Rechercher un matériau..." />
         </div>
+        <div class="filter-label">
+          <span>Rareté :</span>
+          <select id="farm-rarity">
+            <option value="all">Toutes</option>
+            <option value="bronze">Bronze</option>
+            <option value="silver">Argent</option>
+            <option value="gold">Or</option>
+          </select>
+        </div>
+      </div>
+      <div id="farm-grid" class="artifact-grid"></div>
+    </section>
+
+    <!-- ONGLET 2 : TRAINING GROUND -->
+    <section id="tab-training" class="view tab-panel">
+      <div class="intro"><h2>Training Ground & Gemmes</h2></div>
+      <div class="card">
+        <p class="muted">Planning des classes et coûts en gemmes pour tes compétences.</p>
+      </div>
+    </section>
+
+    <!-- ONGLET 4 : PLANNING -->
+    <section id="tab-planning" class="view tab-panel">
+      <div class="intro"><h2>Events & Bannières 2026</h2></div>
+      <div class="cards-grid">
+        <div class="card"><img src="assets/event-2026.png" alt="Event 2026" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/banniere-2026.png" alt="Bannières 2026" style="width:100%; border-radius:12px;"></div>
       </div>
     </section>
 
     <!-- ONGLET 5 : GRAND SERVANTS -->
-    <section id="tab-grand" class="tab-panel">
-      <h2>👑 Sélection Grand Graph</h2>
-      <div class="grand-list">
-        <div class="card"><img src="assets/grand-1.png" alt="Grand Graph Config 1" /></div>
-        <div class="card"><img src="assets/grand-2.png" alt="Grand Graph Config 2" /></div>
-        <div class="card"><img src="assets/grand-3.png" alt="Grand Graph Config 3" /></div>
-        <div class="card"><img src="assets/grand-4.png" alt="Grand Graph Config 4" /></div>
-        <div class="card"><img src="assets/grand-5.png" alt="Grand Graph Config 5" /></div>
+    <section id="tab-grand" class="view tab-panel">
+      <div class="intro"><h2>Sélection Grand Graph</h2></div>
+      <div class="cards-grid">
+        <div class="card"><img src="assets/grand-1.png" alt="Grand 1" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-2.png" alt="Grand 2" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-3.png" alt="Grand 3" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-4.png" alt="Grand 4" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-5.png" alt="Grand 5" style="width:100%; border-radius:12px;"></div>
       </div>
     </section>
   </main>
+
+  <footer>
+    <p>FGO NA Helper — Design inspiré de Genshin Artefacts</p>
+  </footer>
 
   <script src="app.js"></script>
 </body>
