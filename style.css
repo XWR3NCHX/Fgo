@@ -1,24 +1,19 @@
 :root {
-  /* Aligné sur ton design Genshin / Style Chaldea */
-  --bg-main: #0b0f19;       /* Fond général très sombre */
-  --bg-card: #131b2e;       /* Fond des cartes et tableaux */
-  --bg-hover: #1e293b;      /* Effet au survol */
-  --border: #2a3a5a;        /* Bordures élégantes et subtiles */
-  --text-main: #f1f5f9;     /* Texte principal clair */
-  --text-muted: #94a3b8;    /* Texte secondaire / gris */
-  --accent: #3b82f6;        /* Bleu principal / action */
-  --gold: #f59e0b;          /* Or / Rareté 5★ / Accents FGO */
-  --success: #10b981;       /* Vert / Validé */
+  --bg-main: #0b0f19;
+  --bg-card: #131b2e;
+  --bg-hover: #1e293b;
+  --border: #2a3a5a;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --accent: #3b82f6;
+  --gold: #f59e0b;
+  --success: #10b981;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Remplace par la police de ton repo Genshin si tu en as une spécifique */
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--bg-main);
   color: var(--text-main);
   line-height: 1.6;
@@ -34,12 +29,7 @@ body {
   z-index: 100;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
+.brand { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
 
 .back-link {
   color: var(--text-muted);
@@ -51,12 +41,7 @@ body {
   background: var(--bg-card);
   transition: all 0.2s ease;
 }
-
-.back-link:hover {
-  color: var(--text-main);
-  border-color: var(--accent);
-  background: var(--bg-hover);
-}
+.back-link:hover { color: var(--text-main); border-color: var(--accent); background: var(--bg-hover); }
 
 .badge {
   background: var(--accent);
@@ -67,11 +52,7 @@ body {
   font-weight: 600;
 }
 
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
+.tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
 .tab-btn {
   background: var(--bg-card);
@@ -83,13 +64,7 @@ body {
   font-weight: 600;
   transition: all 0.2s;
 }
-
-.tab-btn:hover {
-  background: var(--bg-hover);
-  color: var(--text-main);
-  border-color: var(--text-muted);
-}
-
+.tab-btn:hover { background: var(--bg-hover); color: var(--text-main); border-color: var(--text-muted); }
 .tab-btn.active {
   background: var(--accent);
   color: #fff;
@@ -97,27 +72,11 @@ body {
   box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
 }
 
-.container {
-  max-width: 1280px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
-}
+.container { max-width: 1280px; margin: 2rem auto; padding: 0 1.5rem; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
 
-.tab-panel {
-  display: none;
-}
-
-.tab-panel.active {
-  display: block;
-}
-
-.controls {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
+.controls { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
 input, select {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -128,15 +87,8 @@ input, select {
   outline: none;
   transition: border-color 0.2s;
 }
-
-input:focus, select:focus {
-  border-color: var(--accent);
-}
-
-input {
-  flex: 1;
-  min-width: 250px;
-}
+input:focus, select:focus { border-color: var(--accent); }
+input { flex: 1; min-width: 250px; }
 
 .card {
   background: var(--bg-card);
@@ -149,8 +101,89 @@ input {
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.25rem;
+}
+
+/* Style de carte cliquable / sélectionnable (Façon Artéfacts) */
+.servant-select-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+.servant-select-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  background: var(--bg-hover);
+}
+.servant-select-card.is-max {
+  border-color: var(--success);
+  opacity: 0.65;
+  background: rgba(16, 185, 129, 0.03);
+}
+
+.servant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.servant-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.servant-class {
+  font-size: 0.75rem;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  background: rgba(245, 158, 11, 0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.servant-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.prio-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.prio-high { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px solid rgba(245, 158, 11, 0.3); }
+.prio-wait { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.3); }
+.prio-max  { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.checkbox-container input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--success);
 }
 
 .mat-header {
@@ -161,7 +194,6 @@ input {
   padding-bottom: 0.6rem;
   margin-bottom: 0.8rem;
 }
-
 .mat-code {
   font-size: 0.75rem;
   color: var(--gold);
@@ -172,46 +204,12 @@ input {
   font-weight: 600;
 }
 
-.table-responsive {
-  overflow-x: auto;
-}
+.table-responsive { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+.data-table th { color: var(--text-muted); font-weight: 600; background: rgba(255, 255, 255, 0.02); }
 
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.data-table th, .data-table td {
-  padding: 0.75rem;
-  text-align: left;
-  border-bottom: 1px solid var(--border);
-}
-
-.data-table th {
-  color: var(--text-muted);
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.prio-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.prio-high { background: rgba(245, 158, 11, 0.15); color: var(--gold); border: 1px solid rgba(245, 158, 11, 0.3); }
-.prio-wait { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.3); }
-.prio-max  { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-
-.stats-bar {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-
+.stats-bar { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .stat-pill {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -227,8 +225,4 @@ input {
   margin-top: 0.75rem;
   border: 1px solid var(--border);
 }
-
-.muted {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-}
+.muted { color: var(--text-muted); font-size: 0.85rem; }
