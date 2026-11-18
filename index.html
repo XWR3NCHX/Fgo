@@ -1,244 +1,162 @@
-:root {
-  color-scheme: dark;
-  --bg: #101720;
-  --panel: #192431;
-  --panel2: #202e3d;
-  --line: #344252;
-  --text: #f2f5f8;
-  --muted: #a9b6c4;
-  --gold: #e4c27a;
-  --blue: #8db9d9;
-  --danger: #d97575;
-  --success: #10b981;
-  --radius: 18px;
-}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FGO NA Helper — Guide & Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-*{box-sizing:border-box}
+  <!-- HEADER IDENTIQUE AU SITE D'ARTÉFACTS -->
+  <header class="site-header">
+    <div class="brand">
+      <a href="../index.html" class="back-link">← Accueil</a>
+      <div class="brand-mark">✦</div>
+      <div>
+        <p class="eyebrow">FATE/GRAND ORDER NA</p>
+        <h1>Bibliothèque & Bond Tracker</h1>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="bond">💎 Bond Level</button>
+      <button class="tab" data-tab="farm">📦 Farm Matériaux</button>
+      <button class="tab" data-tab="training">⚔️ Training Ground</button>
+      <button class="tab" data-tab="planning">📅 2026</button>
+      <button class="tab" data-tab="grand">👑 Grand Servants</button>
+    </nav>
+  </header>
 
-body{
-  margin:0;
-  background:radial-gradient(ellipse at top,#1b2b3b 0,var(--bg) 55%);
-  color:var(--text);
-  font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;
-  min-height:100vh;
-}
+  <main>
+    <!-- ONGLET 3 : BOND LEVEL (Le principal demandé) -->
+    <section id="tab-bond" class="view tab-panel active">
+      <div class="intro">
+        <div>
+          <h2>Suivi des Bond Levels</h2>
+          <p class="muted">Sélectionne tes Servants, gère leurs priorités et coche leur Bond Max.</p>
+        </div>
+        <div class="stat-card">
+          <span id="stat-max">0</span>
+          <small>Bond Max</small>
+        </div>
+      </div>
 
-button,input,select{font:inherit}
-button{cursor:pointer}
-a{color:var(--blue)}
+      <!-- FORMULAIRE D'AJOUT -->
+      <div class="card" style="margin-bottom: 24px;">
+        <h3 style="margin-top:0; color:var(--gold); font-size:1.1rem; margin-bottom:12px;">➕ Ajouter un nouveau Servant</h3>
+        <form id="add-servant-form" class="toolbar" style="margin-bottom:0;">
+          <div class="search-box">
+            <input type="text" id="new-servant-name" placeholder="Nom du Servant (ex: Artoria, Castoria...)" required />
+          </div>
+          <div class="filter-label">
+            <span>Classe :</span>
+            <select id="new-servant-class" required>
+              <option value="Saber">Saber</option>
+              <option value="Archer">Archer</option>
+              <option value="Lancer">Lancer</option>
+              <option value="Rider">Rider</option>
+              <option value="Caster">Caster</option>
+              <option value="Assassin">Assassin</option>
+              <option value="Berserker">Berserker</option>
+              <option value="Ruler">Ruler</option>
+              <option value="Avenger">Avenger</option>
+              <option value="Alter Ego">Alter Ego</option>
+              <option value="Moon Cancer">Moon Cancer</option>
+              <option value="Pretender">Pretender</option>
+              <option value="Foreigner">Foreigner</option>
+            </select>
+          </div>
+          <div class="filter-label">
+            <span>Priorité :</span>
+            <select id="new-servant-prio">
+              <option value="Priorité 1">Priorité 1</option>
+              <option value="Priorité 2">Priorité 2</option>
+              <option value="Priorité 3">Priorité 3</option>
+              <option value="En attente">En attente</option>
+            </select>
+          </div>
+          <button type="submit" class="button">Ajouter</button>
+        </form>
+      </div>
 
-.site-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:24px;
-  padding:22px clamp(18px,5vw,72px);
-  border-bottom:1px solid #ffffff18;
-  background:#101720dc;
-  position:sticky;
-  top:0;
-  z-index:5;
-  backdrop-filter:blur(14px);
-}
+      <!-- BARRE DE RECHERCHE -->
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="bond-search" placeholder="Rechercher par nom ou par classe..." />
+        </div>
+        <div class="filter-label">
+          <span>Filtrer :</span>
+          <select id="bond-filter">
+            <option value="all">Tous</option>
+            <option value="todo">À faire / Prioritaires</option>
+            <option value="max">Bond Max</option>
+          </select>
+        </div>
+      </div>
 
-.brand{display:flex;align-items:center;gap:14px}
-.brand-mark{
-  display:grid;
-  place-items:center;
-  width:48px;
-  height:48px;
-  border-radius:15px;
-  background:#e4c27a1c;
-  border:1px solid #e4c27a60;
-  color:var(--gold);
-  font-size:28px;
-}
-.eyebrow{font-size:.72rem;letter-spacing:.17em;color:var(--gold);font-weight:800;margin:0 0 5px}
-.brand h1{font-size:clamp(1.05rem,2.5vw,1.5rem);margin:0}
+      <!-- GRILLE DE CARTES (Style artéfacts) -->
+      <div id="bond-grid" class="artifact-grid"></div>
+    </section>
 
-.tabs{display:flex;gap:8px}
-.tab{
-  background:transparent;
-  color:var(--muted);
-  border:1px solid transparent;
-  border-radius:12px;
-  padding:11px 15px;
-  font-weight:650;
-  transition:.2s;
-}
-.tab:hover{background:var(--panel2);color:var(--text)}
-.tab.active{background:var(--panel2);border-color:var(--line);color:var(--text)}
+    <!-- ONGLET 1 : FARM -->
+    <section id="tab-farm" class="view tab-panel">
+      <div class="intro">
+        <div>
+          <h2>Catalogue de Farm</h2>
+          <p class="muted">Optimise tes routes de matériaux.</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="farm-search" placeholder="Rechercher un matériau..." />
+        </div>
+        <div class="filter-label">
+          <span>Rareté :</span>
+          <select id="farm-rarity">
+            <option value="all">Toutes</option>
+            <option value="bronze">Bronze</option>
+            <option value="silver">Argent</option>
+            <option value="gold">Or</option>
+          </select>
+        </div>
+      </div>
+      <div id="farm-grid" class="artifact-grid"></div>
+    </section>
 
-.back-link{
-  color:var(--muted);
-  text-decoration:none;
-  font-size:0.9rem;
-  padding:0.4rem 0.8rem;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:var(--panel);
-}
-.back-link:hover{color:var(--text);border-color:var(--gold)}
+    <!-- ONGLET 2 : TRAINING GROUND -->
+    <section id="tab-training" class="view tab-panel">
+      <div class="intro"><h2>Training Ground & Gemmes</h2></div>
+      <div class="card">
+        <p class="muted">Planning des classes et coûts en gemmes pour tes compétences.</p>
+      </div>
+    </section>
 
-main{max-width:1440px;margin:auto;padding:34px clamp(16px,4vw,56px) 70px}
-.tab-panel{display:none;animation:appear .22s ease}
-.tab-panel.active{display:block}
+    <!-- ONGLET 4 : PLANNING -->
+    <section id="tab-planning" class="view tab-panel">
+      <div class="intro"><h2>Events & Bannières 2026</h2></div>
+      <div class="cards-grid">
+        <div class="card"><img src="assets/event-2026.png" alt="Event 2026" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/banniere-2026.png" alt="Bannières 2026" style="width:100%; border-radius:12px;"></div>
+      </div>
+    </section>
 
-@keyframes appear{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}
+    <!-- ONGLET 5 : GRAND SERVANTS -->
+    <section id="tab-grand" class="view tab-panel">
+      <div class="intro"><h2>Sélection Grand Graph</h2></div>
+      <div class="cards-grid">
+        <div class="card"><img src="assets/grand-1.png" alt="Grand 1" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-2.png" alt="Grand 2" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-3.png" alt="Grand 3" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-4.png" alt="Grand 4" style="width:100%; border-radius:12px;"></div>
+        <div class="card"><img src="assets/grand-5.png" alt="Grand 5" style="width:100%; border-radius:12px;"></div>
+      </div>
+    </section>
+  </main>
 
-.intro{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:4px 0 26px}
-.intro h2{font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.04em;margin:0 0 7px}
-.muted{color:var(--muted);margin:0}
+  <footer>
+    <p>FGO NA Helper — Design inspiré de Genshin Artefacts</p>
+  </footer>
 
-.stat-card{
-  background:linear-gradient(145deg,#27394a,#18232f);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:17px 23px;
-  text-align:center;
-  min-width:105px;
-}
-.stat-card span{display:block;font-size:1.8rem;font-weight:800;color:var(--gold)}
-.stat-card small{color:var(--muted)}
-
-.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.search-box{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex:1 1 300px;
-  max-width:650px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:13px;
-  padding:0 15px;
-  color:var(--gold);
-}
-.search-box input{
-  width:100%;
-  padding:14px 0;
-  background:transparent;
-  border:0;
-  outline:0;
-  color:var(--text);
-}
-.filter-label{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.9rem}
-.filter-label select{
-  background:var(--panel);
-  color:var(--text);
-  border:1px solid var(--line);
-  padding:12px;
-  border-radius:12px;
-}
-
-.button{
-  border:1px solid #e4c27a66;
-  background:var(--gold);
-  color:#25211a;
-  border-radius:12px;
-  padding:11px 18px;
-  font-weight:750;
-}
-.button:hover{filter:brightness(1.08)}
-
-.card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:20px;
-}
-
-.artifact-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:16px;
-}
-
-/* CARTE SERVANT (Style Artéfact sélectif) */
-.servant-card{
-  position:relative;
-  overflow:hidden;
-  text-align:left;
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:18px;
-  background:linear-gradient(155deg,#233344,#18222e);
-  color:var(--text);
-  transition:transform .18s,border-color .18s;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  min-height:140px;
-}
-.servant-card:hover{
-  transform:translateY(-3px);
-  border-color:var(--gold);
-}
-.servant-card.is-max{
-  border-color:var(--success);
-  opacity:0.55;
-  background:linear-gradient(155deg,#172522,#101715);
-}
-
-.servant-card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-}
-.servant-name{
-  font-size:1.05rem;
-  font-weight:700;
-  margin:0;
-  color:var(--text);
-}
-.servant-class{
-  color:var(--gold);
-  border:1px solid #e4c27a60;
-  background:#e4c27a1c;
-  padding:2px 8px;
-  border-radius:6px;
-  font-size:0.75rem;
-  font-weight:700;
-}
-
-.servant-card-footer{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:16px;
-  padding-top:12px;
-  border-top:1px solid var(--line);
-}
-.prio-badge{
-  font-size:0.75rem;
-  padding:3px 10px;
-  border-radius:99px;
-  font-weight:700;
-}
-.prio-high{background:#e4c27a22;color:var(--gold);border:1px solid #e4c27a55;}
-.prio-wait{background:#34425255;color:var(--muted);border:1px solid var(--line);}
-.prio-max{background:#10b98122;color:#34d399;border:1px solid #10b98155;}
-
-.checkbox-wrap{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:0.8rem;
-  color:var(--muted);
-}
-.checkbox-wrap input{
-  width:16px;
-  height:16px;
-  cursor:pointer;
-  accent-color:var(--success);
-}
-
-footer{
-  border-top:1px solid #ffffff16;
-  padding:22px;
-  text-align:center;
-  color:#8292a2;
-  font-size:.82rem;
-}
+  <script src="app.js"></script>
+</body>
+</html>
