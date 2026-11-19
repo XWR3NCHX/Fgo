@@ -3,31 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FGO NA — Tracker & Farm</title>
+  <title>Fate/Grand Order — Tracker & Farm</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
+  <!-- Bannière inspirée de la carte Fate/Grand Order de Homepage -->
+  <header class="fgo-hero">
+    <div class="hero-rings" aria-hidden="true">
+      <span class="ring ring-1"></span>
+      <span class="ring ring-2"></span>
+      <span class="ring ring-3"></span>
+      <svg class="fgo-diamond" viewBox="0 0 64 64" width="52" height="52" fill="none" stroke="currentColor" stroke-width="3.2">
+        <polygon points="32,8 56,32 32,56 8,32"></polygon>
+      </svg>
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-top">
         <a href="https://xwr3nchx.github.io/homepage-/" class="back-btn" title="Retour à l'accueil">← Accueil</a>
-        <div class="brand-title">
-          <h1>Fate/Grand Order <span class="badge-na">NA</span></h1>
-          <p>Suivi des Bond Levels & Meilleurs spots de Farm</p>
-        </div>
+        <span class="grand-order-tag">GRAND ORDER</span>
       </div>
 
-      <nav class="tabs" role="tablist">
-        <button class="tab-btn active" data-tab="bond" role="tab" aria-selected="true">
-          Bond Level <span id="bond-counter" class="pill">0/0</span>
-        </button>
-        <button class="tab-btn" data-tab="farm" role="tab" aria-selected="false">
-          Farm Matériaux <span id="farm-counter" class="pill">61</span>
-        </button>
-      </nav>
+      <div class="hero-bottom">
+        <div class="hero-title">
+          <h1>Fate/Grand Order</h1>
+          <p>Suivi des servants, priorités de bond level et meilleurs spots de farm (NA).</p>
+        </div>
+
+        <nav class="tabs" role="tablist">
+          <button class="tab-btn active" data-tab="bond" role="tab" aria-selected="true">
+            Bond Level <span id="bond-counter" class="pill">0/0</span>
+          </button>
+          <button class="tab-btn" data-tab="farm" role="tab" aria-selected="false">
+            Farm Matériaux <span id="farm-counter" class="pill">61</span>
+          </button>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -47,7 +61,6 @@
         </div>
       </div>
 
-      <!-- Mini statistiques par statut -->
       <div class="stats-bar">
         <div class="stat-chip">
           <span class="stat-label">En cours (Prioritaires)</span>
@@ -75,9 +88,7 @@
                 <th class="col-del"></th>
               </tr>
             </thead>
-            <tbody id="bond-tbody">
-              <!-- Généré dynamiquement par script.js -->
-            </tbody>
+            <tbody id="bond-tbody"></tbody>
           </table>
         </div>
       </div>
@@ -91,7 +102,6 @@
           <p class="subtitle">Meilleure mission libre associée à chaque matériau (serveur NA).</p>
         </div>
 
-        <!-- Petite barre de recherche compacte -->
         <div class="search-box">
           <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
@@ -118,9 +128,7 @@
                 <th class="col-drop">Drop Rate</th>
               </tr>
             </thead>
-            <tbody id="farm-tbody">
-              <!-- Généré dynamiquement par script.js -->
-            </tbody>
+            <tbody id="farm-tbody"></tbody>
           </table>
         </div>
         <div id="farm-empty" class="empty-state hidden">
