@@ -92,6 +92,41 @@ const FARM_DATA = [
   { item: "Holy Water of Destiny", area: "Non disponible (NA)", quest: "-", drop: null }
 ];
 
+// Dossiers "2027" (miniature cliquable -> image en grand)
+// Place tes images extraites de l'Excel dans le dossier `assets/` de ton dépôt GitHub
+const FUTURE_EVENTS_FOLDERS = [
+  {
+    folderName: "2027",
+    tag: "Évents",
+    image: "assets/events-2027.png"
+  }
+];
+
+const FUTURE_BANNERS_FOLDERS = [
+  {
+    folderName: "2027",
+    tag: "Bannières",
+    image: "assets/banners-2027.png"
+  }
+];
+
+// Données issues de l'onglet TRAINING GROUND
+const TRAINING_GROUND_DAYS = [
+  { day: "lundi", mark: null },
+  { day: "mardi", mark: null },
+  { day: "mercredi", mark: "+" },
+  { day: "jeudi", mark: "+" },
+  { day: "vendredi", mark: null },
+  { day: "samedi", mark: null },
+  { day: "dimanche", mark: null }
+];
+
+const TRAINING_GROUND_GEMS = [
+  { label: "Gem / Étoile", r1: null, r2: 18, r3: 27, r4: 36, r5: 42 },
+  { label: "Gem / Étoile (ligne 2)", r1: null, r2: 18, r3: 27, r4: 36, r5: 51 },
+  { label: "Gem / Étoile (ligne 3)", r1: null, r2: 18, r3: 27, r4: 36, r5: 51 }
+];
+
 // ==================== ÉTAT & LOCALSTORAGE ====================
 const STORAGE_KEY = "fgo_na_bond_servants_v1";
 
@@ -116,10 +151,6 @@ function saveServants() {
 let servants = loadServants();
 
 // ==================== LOGIQUE DE TRI BOND LEVEL ====================
-// Ordre :
-// 1. Non Bond Max avec priorité numérique (1, 2, 3...) triée par ordre croissant
-// 2. Non Bond Max "en attente"
-// 3. Bond Max cochés (tout en bas de la liste)
 function getSortedServants() {
   return [...servants].sort((a, b) => {
     if (a.bondMax !== b.bondMax) {
@@ -153,13 +184,9 @@ function renderBondTable() {
   let countMax = 0;
 
   sorted.forEach((s) => {
-    if (s.bondMax) {
-      countMax++;
-    } else if (typeof s.priority === "number") {
-      countPrio++;
-    } else {
-      countWait++;
-    }
+    if (s.bondMax) countMax++;
+    else if (typeof s.priority === "number") countPrio++;
+    else countWait++;
 
     const tr = document.createElement("tr");
     if (s.bondMax) tr.classList.add("is-max");
@@ -167,7 +194,6 @@ function renderBondTable() {
 
     const classSlug = s.class.replace(/\s+/g, "-");
 
-    // Colonne Priorité (sélecteur si non max, badge "Max" sinon)
     const prioCell = s.bondMax
       ? `<span class="prio-badge-max">Max</span>`
       : `
@@ -196,14 +222,12 @@ function renderBondTable() {
     bondTbody.appendChild(tr);
   });
 
-  // Mise à jour des compteurs
   bondCounter.textContent = `${countMax}/${servants.length}`;
   statPrio.textContent = countPrio;
   statWait.textContent = countWait;
   statMax.textContent = countMax;
 }
 
-// Événements délégués sur le tableau Bond Level
 bondTbody.addEventListener("change", (e) => {
   const target = e.target;
   const id = Number(target.dataset.id);
@@ -264,12 +288,6 @@ closeModalBtn.addEventListener("click", closeModal);
 cancelModalBtn.addEventListener("click", closeModal);
 modal.addEventListener("click", (e) => {
   if (e.target === modal) closeModal();
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-    closeModal();
-  }
 });
 
 servantForm.addEventListener("submit", (e) => {
@@ -364,6 +382,87 @@ clearSearchBtn.addEventListener("click", () => {
   farmSearch.focus();
 });
 
+// ==================== DOSSIERS MINIATURES + LIGHTBOX (ÉVENTS & BANNIÈRES) ====================
+const eventsGrid = document.getElementById("events-grid");
+const bannersGrid = document.getElementById("banners-grid");
+const lightbox = document.getElementById("lightbox-modal");
+const lightboxImg = document.getElementById("lightbox-img");
+const lightboxTitle = document.getElementById("lightbox-title");
+const closeLightboxBtn = document.getElementById("close-lightbox-btn");
+
+function openLightbox(title, src) {
+  lightboxTitle.textContent = title;
+  lightboxImg.src = src;
+  lightboxImg.alt = title;
+  lightbox.classList.remove("hidden");
+}
+
+function closeLightbox() {
+  lightbox.classList.add("hidden");
+  lightboxImg.src = "";
+}
+
+closeLightboxBtn.addEventListener("click", closeLightbox);
+lightbox.addEventListener("click", (e) => {
+  if (e.target === lightbox) closeLightbox();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    if (!modal.classList.contains("hidden")) closeModal();
+    if (!lightbox.classList.contains("hidden")) closeLightbox();
+  }
+});
+
+function renderFolders(container, folders) {
+  container.innerHTML = "";
+  folders.forEach((item) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "folder-card";
+    btn.innerHTML = `
+      <div class="folder-thumb">
+        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.tag)} ${escapeHtml(item.folderName)}" loading="lazy" />
+        <span class="folder-zoom-hint">Agrandir</span>
+      </div>
+      <div class="folder-meta">
+        <span class="folder-name">${escapeHtml(item.folderName)}</span>
+        <span class="folder-tag">${escapeHtml(item.tag)}</span>
+      </div>
+    `;
+    btn.addEventListener("click", () => openLightbox(`${item.tag} — ${item.folderName}`, item.image));
+    container.appendChild(btn);
+  });
+}
+
+// ==================== RENDU TRAINING GROUND ====================
+function renderTrainingGround() {
+  const daysTbody = document.getElementById("tg-days-tbody");
+  const gemsTbody = document.getElementById("tg-gems-tbody");
+
+  const dayTr = document.createElement("tr");
+  dayTr.innerHTML = TRAINING_GROUND_DAYS.map((d) =>
+    `<td>${d.mark ? `<span class="tg-plus">${escapeHtml(d.mark)}</span>` : `<span class="muted-small">—</span>`}</td>`
+  ).join("");
+  daysTbody.innerHTML = "";
+  daysTbody.appendChild(dayTr);
+
+  gemsTbody.innerHTML = "";
+  TRAINING_GROUND_GEMS.forEach((row) => {
+    const tr = document.createElement("tr");
+    const fmt = (v) => (v !== null && v !== undefined ? `<strong>${v}</strong>` : `<span class="muted-small">—</span>`);
+    tr.innerHTML = `
+      <td>${escapeHtml(row.label)}</td>
+      <td>${fmt(row.r1)}</td>
+      <td>${fmt(row.r2)}</td>
+      <td>${fmt(row.r3)}</td>
+      <td>${fmt(row.r4)}</td>
+      <td>${fmt(row.r5)}</td>
+    `;
+    gemsTbody.appendChild(tr);
+  });
+}
+
 // ==================== NAVIGATION PAR ONGLETS ====================
 const tabBtns = document.querySelectorAll(".tab-btn");
 const tabPanels = document.querySelectorAll(".tab-panel");
@@ -395,3 +494,6 @@ function escapeHtml(str) {
 // Initialisation
 renderBondTable();
 renderFarmTable();
+renderFolders(eventsGrid, FUTURE_EVENTS_FOLDERS);
+renderFolders(bannersGrid, FUTURE_BANNERS_FOLDERS);
+renderTrainingGround();
