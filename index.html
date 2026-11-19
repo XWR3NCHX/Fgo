@@ -30,7 +30,7 @@
       <div class="hero-bottom">
         <div class="hero-title">
           <h1>Fate/Grand Order</h1>
-          <p>Suivi des servants, priorités de bond level et meilleurs spots de farm (NA).</p>
+          <p>Suivi des servants, priorités de bond level, farm, événements, bannières & training ground.</p>
         </div>
 
         <nav class="tabs" role="tablist">
@@ -38,7 +38,16 @@
             Bond Level <span id="bond-counter" class="pill">0/0</span>
           </button>
           <button class="tab-btn" data-tab="farm" role="tab" aria-selected="false">
-            Farm Matériaux <span id="farm-counter" class="pill">61</span>
+            Farm <span id="farm-counter" class="pill">61</span>
+          </button>
+          <button class="tab-btn" data-tab="events" role="tab" aria-selected="false">
+            Évents
+          </button>
+          <button class="tab-btn" data-tab="banners" role="tab" aria-selected="false">
+            Bannières
+          </button>
+          <button class="tab-btn" data-tab="training" role="tab" aria-selected="false">
+            Training Ground
           </button>
         </nav>
       </div>
@@ -136,6 +145,87 @@
         </div>
       </div>
     </section>
+
+    <!-- ==================== ONGLET FUTURS ÉVENTS (MINIATURE DOSSIER) ==================== -->
+    <section id="tab-events" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Évents à venir</h2>
+          <p class="subtitle">Clique sur le dossier pour afficher l'image en grand.</p>
+        </div>
+      </div>
+
+      <div id="events-grid" class="folder-grid"></div>
+    </section>
+
+    <!-- ==================== ONGLET FUTURES BANNIÈRES (MINIATURE DOSSIER) ==================== -->
+    <section id="tab-banners" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Bannières à venir</h2>
+          <p class="subtitle">Clique sur le dossier pour afficher l'image en grand.</p>
+        </div>
+      </div>
+
+      <div id="banners-grid" class="folder-grid"></div>
+    </section>
+
+    <!-- ==================== ONGLET TRAINING GROUND ==================== -->
+    <section id="tab-training" class="tab-panel">
+      <div class="panel-header">
+        <div>
+          <h2>Training Ground</h2>
+          <p class="subtitle">Données issues de l'onglet <strong>TRAINING GROUND</strong> de ton Excel.</p>
+        </div>
+      </div>
+
+      <div class="training-layout">
+        <div class="table-card">
+          <div class="card-subhead">
+            <h3>Planning Hebdomadaire</h3>
+            <span class="muted-small">Jours de la semaine</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table tg-table">
+              <thead>
+                <tr>
+                  <th>Lundi</th>
+                  <th>Mardi</th>
+                  <th>Mercredi</th>
+                  <th>Jeudi</th>
+                  <th>Vendredi</th>
+                  <th>Samedi</th>
+                  <th>Dimanche</th>
+                </tr>
+              </thead>
+              <tbody id="tg-days-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="card-subhead">
+            <h3>GEM — Gem / Étoile</h3>
+            <span class="muted-small">Répartition par rareté</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table tg-table">
+              <thead>
+                <tr>
+                  <th>Gem / Étoile</th>
+                  <th>1★</th>
+                  <th>2★</th>
+                  <th>3★</th>
+                  <th>4★</th>
+                  <th>5★</th>
+                </tr>
+              </thead>
+              <tbody id="tg-gems-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ==================== MODALE AJOUT SERVANT ==================== -->
@@ -197,6 +287,19 @@
           <button type="submit" class="btn btn-primary">Enregistrer</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ==================== LIGHTBOX IMAGE PLEIN ÉCRAN ==================== -->
+  <div id="lightbox-modal" class="lightbox-backdrop hidden" role="dialog" aria-modal="true" aria-label="Aperçu de l'image">
+    <div class="lightbox-box">
+      <div class="lightbox-top">
+        <span id="lightbox-title" class="lightbox-title">2027</span>
+        <button id="close-lightbox-btn" class="icon-close" aria-label="Fermer l'image">×</button>
+      </div>
+      <div class="lightbox-img-wrap">
+        <img id="lightbox-img" src="" alt="" />
+      </div>
     </div>
   </div>
 
