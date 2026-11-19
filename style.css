@@ -67,7 +67,7 @@ body {
 .hero-inner {
   position: relative;
   z-index: 2;
-  max-width: 1100px;
+  max-width: 1140px;
   margin: 0 auto;
   padding: 1.15rem 1.25rem 1.4rem;
   min-height: 195px;
@@ -134,8 +134,9 @@ body {
 /* ==================== TABS ==================== */
 .tabs {
   display: flex;
-  gap: 0.45rem;
-  background: rgba(16, 23, 32, 0.72);
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  background: rgba(16, 23, 32, 0.75);
   padding: 0.3rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
@@ -144,14 +145,14 @@ body {
 .tab-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.95rem;
+  gap: 0.45rem;
+  padding: 0.48rem 0.85rem;
   border: none;
   border-radius: 6px;
   background: transparent;
   color: var(--text-muted);
   font-family: inherit;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -168,8 +169,8 @@ body {
 }
 
 .pill {
-  font-size: 0.74rem;
-  padding: 0.1rem 0.45rem;
+  font-size: 0.72rem;
+  padding: 0.08rem 0.42rem;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
   color: var(--text-muted);
@@ -182,7 +183,7 @@ body {
 
 /* ==================== MAIN & PANELS ==================== */
 .container {
-  max-width: 1100px;
+  max-width: 1140px;
   margin: 0 auto;
   padding: 1.75rem 1.25rem 3rem;
 }
@@ -344,6 +345,128 @@ body {
 .clear-search.visible { display: block; }
 .clear-search:hover { color: var(--text-main); }
 
+/* ==================== DOSSIERS MINIATURES (ÉVENTS / BANNIÈRES) ==================== */
+.folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.15rem;
+}
+
+.folder-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.folder-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(222, 192, 125, 0.5);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.folder-thumb {
+  position: relative;
+  height: 145px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.folder-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.folder-zoom-hint {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.55rem;
+  background: rgba(16, 23, 32, 0.82);
+  color: var(--accent-gold);
+  border: 1px solid rgba(222, 192, 125, 0.3);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.folder-meta {
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.folder-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.folder-tag {
+  font-size: 0.74rem;
+  color: var(--accent-gold);
+  background: var(--accent-gold-soft);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ==================== TRAINING GROUND ==================== */
+.training-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.card-subhead {
+  padding: 0.85rem 1rem;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-subhead h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.muted-small {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.tg-table th,
+.tg-table td {
+  text-align: center;
+}
+
+.tg-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--accent-gold-soft);
+  color: var(--accent-gold);
+  border: 1px solid rgba(222, 192, 125, 0.4);
+  font-weight: 700;
+}
+
 /* ==================== TABLE ==================== */
 .table-card {
   background: var(--bg-surface);
@@ -493,11 +616,12 @@ tr.is-prio { background: rgba(222, 192, 125, 0.04); }
 
 .hidden { display: none !important; }
 
-/* ==================== MODAL ==================== */
-.modal-backdrop {
+/* ==================== MODAL & LIGHTBOX ==================== */
+.modal-backdrop,
+.lightbox-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(7, 11, 17, 0.8);
+  background: rgba(7, 11, 17, 0.84);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -516,20 +640,25 @@ tr.is-prio { background: rgba(222, 192, 125, 0.04); }
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.55);
 }
 
-.modal-header {
+.modal-header,
+.lightbox-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.1rem;
 }
 
-.modal-header h3 { font-size: 1.05rem; font-weight: 700; }
+.modal-header h3,
+.lightbox-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
 
 .icon-close {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   cursor: pointer;
   line-height: 1;
 }
@@ -589,4 +718,30 @@ tr.is-prio { background: rgba(222, 192, 125, 0.04); }
   display: flex;
   justify-content: flex-end;
   gap: 0.6rem;
+}
+
+.lightbox-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  max-width: 95vw;
+  max-height: 92vh;
+  padding: 1rem 1.15rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+}
+
+.lightbox-img-wrap {
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-img-wrap img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
 }
