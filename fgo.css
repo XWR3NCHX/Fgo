@@ -524,3 +524,30 @@ footer {
     flex-wrap: wrap;
   }
 }
+
+/* =========================================
+   MODIFICATION DIRECTE DES PRIORITÉS
+========================================= */
+
+.priority-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+
+.priority-edit input {
+  width: 75px;
+  padding: 7px;
+  color: var(--gold-light);
+  background: #0d1724;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-align: center;
+  outline: none;
+}
+
+.priority-edit input:focus {
+  border-color: var(--gold);
+}
