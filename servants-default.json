@@ -1,0 +1,17 @@
+
+[
+  {
+    "id": "servant-001",
+    "name": "Aoko Aozaki",
+    "classe": "Foreigner",
+    "priority": "1",
+    "bondMax": false
+  },
+  {
+    "id": "servant-002",
+    "name": "Setanta",
+    "classe": "Saber",
+    "priority": "2",
+    "bondMax": false
+  }
+]

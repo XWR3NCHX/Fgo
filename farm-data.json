@@ -1,0 +1,11 @@
+
+[
+  {
+    "material": "Example Material",
+    "code": "EX",
+    "node": "Example Node",
+    "area": "Example Area",
+    "mission": "Example Quest",
+    "dropRate": 35.5
+  }
+]
