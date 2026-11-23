@@ -156,19 +156,15 @@ function renderBond() {
           ${escapeHTML(servant.classe || "Classe inconnue")}
         </span>
 
-        <span class="priority-indicator">
-          ${servant.priority !== ""
-            ? "P" + escapeHTML(servant.priority)
-            : "—"}
-        </span>
-
-        <label>
+        <label class="priority-edit">
           Priorité
           <input
-            type="text"
-            inputmode="numeric"
+            type="number"
+            min="1"
+            step="1"
             value="${escapeHTML(servant.priority)}"
             data-priority="${escapeHTML(servant.id)}"
+            placeholder="—"
             aria-label="Priorité de ${escapeHTML(servant.name)}"
           >
         </label>
@@ -268,41 +264,51 @@ $("#farmSearch").addEventListener("input", renderFarm);
 
 /* ==========================================
    MODIFICATION DU BOND MAX
+   ET DES PRIORITÉS
 ========================================== */
 
 $("#servantList").addEventListener("change", event => {
-  const id = event.target.dataset.bond;
 
-  if (!id) return;
+  // Modification du Bond Max
+  const bondId = event.target.dataset.bond;
 
-  const servant = servants.find(s => s.id === id);
-  if (!servant) return;
+  if (bondId) {
+    const servant = servants.find(s => s.id === bondId);
+    if (!servant) return;
 
-  servant.bondMax = event.target.checked;
+    servant.bondMax = event.target.checked;
 
-  saveServants();
-  renderBond();
-});
+    saveServants();
+    renderBond();
+    return;
+  }
 
-/* ==========================================
-   MODIFICATION DES PRIORITÉS
-========================================== */
+  // Modification de la priorité
+  const priorityId = event.target.dataset.priority;
 
-$("#servantList").addEventListener("input", event => {
-  const id = event.target.dataset.priority;
+  if (priorityId) {
+    const servant = servants.find(s => s.id === priorityId);
+    if (!servant) return;
 
-  if (!id) return;
+    const value = event.target.value.trim();
 
-  const servant = servants.find(s => s.id === id);
-  if (!servant) return;
+    // Priorité vide autorisée
+    if (value === "") {
+      servant.priority = "";
+    } else {
+      const number = Number(value);
 
-  servant.priority = event.target.value.trim();
+      // Seuls les nombres entiers positifs sont acceptés
+      if (Number.isInteger(number) && number >= 1) {
+        servant.priority = String(number);
+      } else {
+        event.target.value = servant.priority;
+        return;
+      }
+    }
 
-  saveServants();
-});
-
-$("#servantList").addEventListener("focusout", event => {
-  if (event.target.dataset.priority) {
+    // Sauvegarde et actualisation immédiate du classement
+    saveServants();
     renderBond();
   }
 });
@@ -347,7 +353,20 @@ $("#servantForm").addEventListener("submit", event => {
 
   const name = String(form.get("name") || "").trim();
   const classe = String(form.get("classe") || "").trim();
-  const priority = String(form.get("priority") || "").trim();
+  const priorityValue = String(form.get("priority") || "").trim();
+
+  let priority = "";
+
+  if (priorityValue !== "") {
+    const number = Number(priorityValue);
+
+    if (!Number.isInteger(number) || number < 1) {
+      alert("La priorité doit être un nombre entier supérieur ou égal à 1.");
+      return;
+    }
+
+    priority = String(number);
+  }
 
   if (!name) return;
 
@@ -361,7 +380,6 @@ $("#servantForm").addEventListener("submit", event => {
 
   saveServants();
 
-  // Réinitialise la recherche pour afficher le nouveau servant
   $("#bondSearch").value = "";
 
   renderBond();
