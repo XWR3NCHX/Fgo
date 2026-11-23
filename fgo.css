@@ -12,29 +12,46 @@
   <header class="hero">
     <div class="eyebrow">CHALDEA • SUPPORT DATABASE</div>
     <h1>Fate / Grand Order</h1>
-    <p>Bond tracker & matériaux de farm</p>
+    <p>Bond tracker &amp; matériaux de farm</p>
   </header>
 
   <nav class="tabs">
-    <button class="tab active" data-tab="bond">Bond Level</button>
-    <button class="tab" data-tab="farm">Farm</button>
+    <button class="tab active" data-tab="bond" type="button">Bond Level</button>
+    <button class="tab" data-tab="farm" type="button">Farm</button>
   </nav>
 
   <main>
     <!-- BOND LEVEL -->
     <section id="bond" class="panel active">
+
       <div class="section-head">
         <div>
           <h2>Bond Level</h2>
           <p>Priorités en premier · Bond Max en bas</p>
         </div>
-        <button id="addServant" class="primary">＋ Ajouter</button>
+        <button id="addServant" class="primary" type="button">
+          ＋ Ajouter
+        </button>
+      </div>
+
+      <div class="bond-stats" id="bondStats">
+        <div class="stat-card">
+          <span class="stat-label">TOTAL SERVANTS</span>
+          <strong id="totalCount">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">BOND EN COURS</span>
+          <strong id="activeCount">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">BOND MAX</span>
+          <strong id="maxCount">0</strong>
+        </div>
       </div>
 
       <div class="toolbar">
-        <input id="bondSearch"
-          placeholder="Rechercher un servant..."
-          class="search">
+        <input id="bondSearch" type="search"
+          placeholder="Rechercher un servant..." class="search">
       </div>
 
       <div id="servantList"></div>
@@ -49,7 +66,7 @@
         </div>
       </div>
 
-      <input id="farmSearch"
+      <input id="farmSearch" type="search"
         placeholder="Rechercher un matériau, lieu ou mission..."
         class="search compact">
 
@@ -64,17 +81,18 @@
 
       <label>
         Nom
-        <input name="name" required>
+        <input name="name" type="text" required>
       </label>
 
       <label>
         Classe
-        <input name="classe" placeholder="Saber, Archer...">
+        <input name="classe" type="text" placeholder="Saber, Archer...">
       </label>
 
       <label>
         Priorité
-        <input name="priority" placeholder="1 = priorité haute">
+        <input name="priority" type="number" min="1"
+          placeholder="1 = priorité haute">
       </label>
 
       <div class="dialog-actions">
@@ -87,157 +105,6 @@
       </div>
     </form>
   </dialog>
-
-/* ===== CHALDEA UI ===== */
-
-.hero {
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(180deg, #101925, #172638 70%, transparent);
-}
-
-.hero::before,
-.hero::after {
-  content: "";
-  position: absolute;
-  width: 140px;
-  height: 140px;
-  border: 1px solid rgba(215, 185, 121, .15);
-  transform: rotate(45deg);
-  pointer-events: none;
-}
-
-.hero::before {
-  top: -90px;
-  left: -70px;
-}
-
-.hero::after {
-  bottom: -90px;
-  right: -70px;
-}
-
-.panel {
-  position: relative;
-  overflow: hidden;
-}
-
-.panel::before {
-  content: "CHALDEA";
-  position: absolute;
-  top: 10px;
-  right: 18px;
-  color: rgba(215, 185, 121, .05);
-  font-size: 3rem;
-  font-family: Georgia, serif;
-  letter-spacing: .2em;
-  pointer-events: none;
-}
-
-/* Compteur */
-
-.bond-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.stat-card {
-  background: linear-gradient(145deg, #263548, #172230);
-  border: 1px solid rgba(215, 185, 121, .25);
-  padding: 14px;
-  border-radius: 9px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.stat-label {
-  font-size: .68rem;
-  letter-spacing: .1em;
-  color: #9aa8b9;
-}
-
-.stat-card strong {
-  font-size: 1.7rem;
-  color: #d7b979;
-  font-family: Georgia, serif;
-}
-
-/* Classes */
-
-.class-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.class-symbol {
-  font-size: 1rem;
-  color: #d7b979;
-}
-
-/* Priorités */
-
-.priority-indicator {
-  color: #d7b979;
-  border: 1px solid rgba(215, 185, 121, .4);
-  background: rgba(215, 185, 121, .08);
-  border-radius: 6px;
-  padding: 5px 8px;
-  font-size: .8rem;
-  min-width: 40px;
-  text-align: center;
-}
-
-.servant.done {
-  border-color: #344253;
-  filter: saturate(.65);
-}
-
-/* Finition */
-
-.servant {
-  transition: border-color .2s, background .2s;
-}
-
-.servant:hover {
-  border-color: rgba(215, 185, 121, .5);
-  background: #263447;
-}
-
-.primary {
-  box-shadow: 0 0 15px rgba(215, 185, 121, .08);
-}
-
-.primary:hover {
-  box-shadow: 0 0 18px rgba(215, 185, 121, .2);
-}
-
-.small-btn:hover {
-  border-color: #d7b979;
-  color: #d7b979;
-}
-
-@media(max-width: 600px) {
-  .bond-stats {
-    gap: 6px;
-  }
-
-  .stat-card {
-    padding: 10px;
-  }
-
-  .stat-label {
-    font-size: .58rem;
-  }
-
-  .stat-card strong {
-    font-size: 1.35rem;
-  }
-}
 
   <footer>
     Fan-made helper · données sauvegardées dans ton navigateur
