@@ -1,308 +1,97 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fate/Grand Order — Tracker & Farm</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fate/Grand Order | Helper</title>
+  <link rel="stylesheet" href="fgo.css">
 </head>
 <body>
-  <!-- Bannière inspirée de la carte Fate/Grand Order de Homepage -->
-  <header class="fgo-hero">
-    <div class="hero-rings" aria-hidden="true">
-      <span class="ring ring-1"></span>
-      <span class="ring ring-2"></span>
-      <span class="ring ring-3"></span>
-      <svg class="fgo-diamond" viewBox="0 0 64 64" width="52" height="52" fill="none" stroke="currentColor" stroke-width="3.2">
-        <polygon points="32,8 56,32 32,56 8,32"></polygon>
-      </svg>
-    </div>
 
-    <div class="hero-inner">
-      <div class="hero-top">
-        <a href="https://xwr3nchx.github.io/homepage-/" class="back-btn" title="Retour à l'accueil">← Accueil</a>
-        <span class="grand-order-tag">GRAND ORDER</span>
-      </div>
-
-      <div class="hero-bottom">
-        <div class="hero-title">
-          <h1>Fate/Grand Order</h1>
-          <p>Suivi des servants, priorités de bond level, farm, événements, bannières & training ground.</p>
-        </div>
-
-        <nav class="tabs" role="tablist">
-          <button class="tab-btn active" data-tab="bond" role="tab" aria-selected="true">
-            Bond Level <span id="bond-counter" class="pill">0/0</span>
-          </button>
-          <button class="tab-btn" data-tab="farm" role="tab" aria-selected="false">
-            Farm <span id="farm-counter" class="pill">61</span>
-          </button>
-          <button class="tab-btn" data-tab="events" role="tab" aria-selected="false">
-            Évents
-          </button>
-          <button class="tab-btn" data-tab="banners" role="tab" aria-selected="false">
-            Bannières
-          </button>
-          <button class="tab-btn" data-tab="training" role="tab" aria-selected="false">
-            Training Ground
-          </button>
-        </nav>
-      </div>
-    </div>
+  <header class="hero">
+    <div class="eyebrow">CHALDEA • SUPPORT DATABASE</div>
+    <h1>Fate / Grand Order</h1>
+    <p>Bond tracker & matériaux de farm</p>
   </header>
 
-  <main class="container">
-    <!-- ==================== ONGLET BOND LEVEL ==================== -->
-    <section id="tab-bond" class="tab-panel active">
-      <div class="panel-header">
+  <nav class="tabs">
+    <button class="tab active" data-tab="bond">Bond Level</button>
+    <button class="tab" data-tab="farm">Farm</button>
+  </nav>
+
+  <main>
+    <!-- BOND LEVEL -->
+    <section id="bond" class="panel active">
+      <div class="section-head">
         <div>
-          <h2>Suivi Bond Level</h2>
-          <p class="subtitle">Les priorités s'affichent en haut ; cocher <strong>Bond Max</strong> envoie automatiquement le Servant en bas de liste.</p>
+          <h2>Bond Level</h2>
+          <p>Priorités en premier · Bond Max en bas</p>
         </div>
-        <div class="header-actions">
-          <button id="reset-bond-btn" class="btn btn-ghost" title="Réinitialiser avec les données Excel d'origine">Réinitialiser</button>
-          <button id="open-modal-btn" class="btn btn-primary" aria-label="Ajouter un Servant">
-            <span class="plus-icon">+</span> Ajouter
-          </button>
-        </div>
+        <button id="addServant" class="primary">＋ Ajouter</button>
       </div>
 
-      <div class="stats-bar">
-        <div class="stat-chip">
-          <span class="stat-label">En cours (Prioritaires)</span>
-          <span id="stat-prio" class="stat-value accent-gold">0</span>
-        </div>
-        <div class="stat-chip">
-          <span class="stat-label">En attente</span>
-          <span id="stat-wait" class="stat-value">0</span>
-        </div>
-        <div class="stat-chip">
-          <span class="stat-label">Bond Max</span>
-          <span id="stat-max" class="stat-value accent-green">0</span>
-        </div>
+      <div class="toolbar">
+        <input id="bondSearch"
+          placeholder="Rechercher un servant..."
+          class="search">
       </div>
 
-      <div class="table-card">
-        <div class="table-responsive">
-          <table class="data-table" id="bond-table">
-            <thead>
-              <tr>
-                <th class="col-prio">Priorité</th>
-                <th>Servant</th>
-                <th>Classe</th>
-                <th class="col-check">Bond Max</th>
-                <th class="col-del"></th>
-              </tr>
-            </thead>
-            <tbody id="bond-tbody"></tbody>
-          </table>
-        </div>
-      </div>
+      <div id="servantList"></div>
     </section>
 
-    <!-- ==================== ONGLET FARM ==================== -->
-    <section id="tab-farm" class="tab-panel">
-      <div class="panel-header">
+    <!-- FARM -->
+    <section id="farm" class="panel">
+      <div class="section-head">
         <div>
-          <h2>Spots de Farm (Meilleur AP/Drop)</h2>
-          <p class="subtitle">Meilleure mission libre associée à chaque matériau (serveur NA).</p>
-        </div>
-
-        <div class="search-box">
-          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input
-            type="text"
-            id="farm-search"
-            placeholder="Matériau, lieu, mission..."
-            autocomplete="off"
-          />
-          <button id="clear-search" class="clear-search" title="Effacer">×</button>
+          <h2>Farm</h2>
+          <p>Matériaux et missions associées</p>
         </div>
       </div>
 
-      <div class="table-card">
-        <div class="table-responsive">
-          <table class="data-table" id="farm-table">
-            <thead>
-              <tr>
-                <th>Matériau</th>
-                <th>Lieu (Singularité / Lostbelt)</th>
-                <th>Mission (Quest)</th>
-                <th class="col-drop">Drop Rate</th>
-              </tr>
-            </thead>
-            <tbody id="farm-tbody"></tbody>
-          </table>
-        </div>
-        <div id="farm-empty" class="empty-state hidden">
-          Aucun matériau ou mission ne correspond à ta recherche.
-        </div>
-      </div>
-    </section>
+      <input id="farmSearch"
+        placeholder="Rechercher un matériau, lieu ou mission..."
+        class="search compact">
 
-    <!-- ==================== ONGLET FUTURS ÉVENTS (MINIATURE DOSSIER) ==================== -->
-    <section id="tab-events" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2>Évents à venir</h2>
-          <p class="subtitle">Clique sur le dossier pour afficher l'image en grand.</p>
-        </div>
-      </div>
-
-      <div id="events-grid" class="folder-grid"></div>
-    </section>
-
-    <!-- ==================== ONGLET FUTURES BANNIÈRES (MINIATURE DOSSIER) ==================== -->
-    <section id="tab-banners" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2>Bannières à venir</h2>
-          <p class="subtitle">Clique sur le dossier pour afficher l'image en grand.</p>
-        </div>
-      </div>
-
-      <div id="banners-grid" class="folder-grid"></div>
-    </section>
-
-    <!-- ==================== ONGLET TRAINING GROUND ==================== -->
-    <section id="tab-training" class="tab-panel">
-      <div class="panel-header">
-        <div>
-          <h2>Training Ground</h2>
-          <p class="subtitle">Données issues de l'onglet <strong>TRAINING GROUND</strong> de ton Excel.</p>
-        </div>
-      </div>
-
-      <div class="training-layout">
-        <div class="table-card">
-          <div class="card-subhead">
-            <h3>Planning Hebdomadaire</h3>
-            <span class="muted-small">Jours de la semaine</span>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table tg-table">
-              <thead>
-                <tr>
-                  <th>Lundi</th>
-                  <th>Mardi</th>
-                  <th>Mercredi</th>
-                  <th>Jeudi</th>
-                  <th>Vendredi</th>
-                  <th>Samedi</th>
-                  <th>Dimanche</th>
-                </tr>
-              </thead>
-              <tbody id="tg-days-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="table-card">
-          <div class="card-subhead">
-            <h3>GEM — Gem / Étoile</h3>
-            <span class="muted-small">Répartition par rareté</span>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table tg-table">
-              <thead>
-                <tr>
-                  <th>Gem / Étoile</th>
-                  <th>1★</th>
-                  <th>2★</th>
-                  <th>3★</th>
-                  <th>4★</th>
-                  <th>5★</th>
-                </tr>
-              </thead>
-              <tbody id="tg-gems-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <div id="farmList"></div>
     </section>
   </main>
 
-  <!-- ==================== MODALE AJOUT SERVANT ==================== -->
-  <div id="servant-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="modal-title">Ajouter un Servant</h3>
-        <button id="close-modal-btn" class="icon-close" aria-label="Fermer">×</button>
+  <!-- AJOUT SERVANT -->
+  <dialog id="servantDialog">
+    <form id="servantForm">
+      <h3>Ajouter un servant</h3>
+
+      <label>
+        Nom
+        <input name="name" required>
+      </label>
+
+      <label>
+        Classe
+        <input name="classe" placeholder="Saber, Archer...">
+      </label>
+
+      <label>
+        Priorité
+        <input name="priority" placeholder="1 = priorité haute">
+      </label>
+
+      <div class="dialog-actions">
+        <button type="button" id="cancelDialog" class="ghost">
+          Annuler
+        </button>
+        <button type="submit" class="primary">
+          Ajouter
+        </button>
       </div>
+    </form>
+  </dialog>
 
-      <form id="servant-form">
-        <div class="form-group">
-          <label for="servant-name">Nom du Servant</label>
-          <input type="text" id="servant-name" placeholder="Ex: Castoria, Oberon, Morgan..." required />
-        </div>
+  <footer>
+    Fan-made helper · données sauvegardées dans ton navigateur
+  </footer>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="servant-class">Classe</label>
-            <select id="servant-class" required>
-              <option value="Saber">Saber</option>
-              <option value="Archer">Archer</option>
-              <option value="Lancer">Lancer</option>
-              <option value="Rider">Rider</option>
-              <option value="Caster">Caster</option>
-              <option value="Assassin">Assassin</option>
-              <option value="Berserker">Berserker</option>
-              <option value="Ruler">Ruler</option>
-              <option value="Avenger">Avenger</option>
-              <option value="Alter Ego">Alter Ego</option>
-              <option value="Moon Cancer">Moon Cancer</option>
-              <option value="Foreigner">Foreigner</option>
-              <option value="Pretender">Pretender</option>
-              <option value="Beast">Beast</option>
-              <option value="Shielder">Shielder</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="servant-priority">Priorité</label>
-            <select id="servant-priority">
-              <option value="1">Priorité 1</option>
-              <option value="2">Priorité 2</option>
-              <option value="3">Priorité 3</option>
-              <option value="4">Priorité 4</option>
-              <option value="5">Priorité 5</option>
-              <option value="attente" selected>En attente</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-check">
-          <input type="checkbox" id="servant-bondmax" />
-          <label for="servant-bondmax">Déjà Bond Max (sera placé en bas de liste)</label>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" id="cancel-modal-btn" class="btn btn-ghost">Annuler</button>
-          <button type="submit" class="btn btn-primary">Enregistrer</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- ==================== LIGHTBOX IMAGE PLEIN ÉCRAN ==================== -->
-  <div id="lightbox-modal" class="lightbox-backdrop hidden" role="dialog" aria-modal="true" aria-label="Aperçu de l'image">
-    <div class="lightbox-box">
-      <div class="lightbox-top">
-        <span id="lightbox-title" class="lightbox-title">2027</span>
-        <button id="close-lightbox-btn" class="icon-close" aria-label="Fermer l'image">×</button>
-      </div>
-      <div class="lightbox-img-wrap">
-        <img id="lightbox-img" src="" alt="" />
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  <script src="fgo.js"></script>
 </body>
 </html>
