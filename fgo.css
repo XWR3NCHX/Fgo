@@ -1,115 +1,505 @@
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fate/Grand Order | Helper</title>
-  <link rel="stylesheet" href="fgo.css">
-</head>
-<body>
+/* =========================================
+   FATE / GRAND ORDER — CHALDEA INTERFACE
+   Compatible avec fgo.html
+========================================= */
 
-  <header class="hero">
-    <div class="eyebrow">CHALDEA • SUPPORT DATABASE</div>
-    <h1>Fate / Grand Order</h1>
-    <p>Bond tracker &amp; matériaux de farm</p>
-  </header>
+/* VARIABLES */
 
-  <nav class="tabs">
-    <button class="tab active" data-tab="bond" type="button">Bond Level</button>
-    <button class="tab" data-tab="farm" type="button">Farm</button>
-  </nav>
+:root {
+  --bg: #0b111b;
+  --bg-light: #111d2b;
+  --panel: #172536;
+  --panel-light: #223449;
+  --gold: #d7b979;
+  --gold-light: #f0dca8;
+  --text: #e7edf5;
+  --muted: #9aa8b9;
+  --border: rgba(215, 185, 121, .25);
+  --danger: #bd7373;
+}
 
-  <main>
-    <!-- BOND LEVEL -->
-    <section id="bond" class="panel active">
+/* BASE */
 
-      <div class="section-head">
-        <div>
-          <h2>Bond Level</h2>
-          <p>Priorités en premier · Bond Max en bas</p>
-        </div>
-        <button id="addServant" class="primary" type="button">
-          ＋ Ajouter
-        </button>
-      </div>
+* {
+  box-sizing: border-box;
+}
 
-      <div class="bond-stats" id="bondStats">
-        <div class="stat-card">
-          <span class="stat-label">TOTAL SERVANTS</span>
-          <strong id="totalCount">0</strong>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">BOND EN COURS</span>
-          <strong id="activeCount">0</strong>
-        </div>
-        <div class="stat-card">
-          <span class="stat-label">BOND MAX</span>
-          <strong id="maxCount">0</strong>
-        </div>
-      </div>
+html {
+  scroll-behavior: smooth;
+}
 
-      <div class="toolbar">
-        <input id="bondSearch" type="search"
-          placeholder="Rechercher un servant..." class="search">
-      </div>
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, #1b2b40 0%, transparent 45%),
+    var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Arial, sans-serif;
+  line-height: 1.5;
+}
 
-      <div id="servantList"></div>
-    </section>
+button,
+input {
+  font: inherit;
+}
 
-    <!-- FARM -->
-    <section id="farm" class="panel">
-      <div class="section-head">
-        <div>
-          <h2>Farm</h2>
-          <p>Matériaux et missions associées</p>
-        </div>
-      </div>
+button {
+  cursor: pointer;
+}
 
-      <input id="farmSearch" type="search"
-        placeholder="Rechercher un matériau, lieu ou mission..."
-        class="search compact">
+/* HEADER */
 
-      <div id="farmList"></div>
-    </section>
-  </main>
+.hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 65px 20px 55px;
+  background: linear-gradient(
+    180deg,
+    #101925,
+    #172638 75%,
+    transparent
+  );
+  border-bottom: 1px solid var(--border);
+}
 
-  <!-- AJOUT SERVANT -->
-  <dialog id="servantDialog">
-    <form id="servantForm">
-      <h3>Ajouter un servant</h3>
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 1px solid rgba(215, 185, 121, .16);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
 
-      <label>
-        Nom
-        <input name="name" type="text" required>
-      </label>
+.hero::before {
+  top: -100px;
+  left: -60px;
+}
 
-      <label>
-        Classe
-        <input name="classe" type="text" placeholder="Saber, Archer...">
-      </label>
+.hero::after {
+  bottom: -100px;
+  right: -60px;
+}
 
-      <label>
-        Priorité
-        <input name="priority" type="number" min="1"
-          placeholder="1 = priorité haute">
-      </label>
+.eyebrow {
+  color: var(--gold);
+  font-size: .75rem;
+  letter-spacing: .3em;
+  margin-bottom: 12px;
+}
 
-      <div class="dialog-actions">
-        <button type="button" id="cancelDialog" class="ghost">
-          Annuler
-        </button>
-        <button type="submit" class="primary">
-          Ajouter
-        </button>
-      </div>
-    </form>
-  </dialog>
+.hero h1 {
+  margin: 0;
+  color: var(--gold-light);
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  letter-spacing: .06em;
+}
 
-  <footer>
-    Fan-made helper · données sauvegardées dans ton navigateur
-  </footer>
+.hero p {
+  color: var(--muted);
+  margin: 12px 0 0;
+}
 
-  <script src="fgo.js"></script>
-</body>
-</html>
+/* NAVIGATION */
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 10px 25px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: .2s;
+}
+
+.tab:hover,
+.tab.active {
+  color: var(--gold-light);
+  background: rgba(215, 185, 121, .1);
+  border-color: var(--gold);
+}
+
+/* CONTENU */
+
+main {
+  width: min(1100px, 92%);
+  margin: 35px auto;
+}
+
+.panel {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  padding: 25px;
+  background: rgba(17, 29, 43, .92);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, .2);
+}
+
+.panel.active {
+  display: block;
+}
+
+.panel::before {
+  content: "CHALDEA";
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: rgba(215, 185, 121, .045);
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 7vw, 4rem);
+  letter-spacing: .2em;
+  pointer-events: none;
+}
+
+/* TITRES DE SECTION */
+
+.section-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.section-head h2 {
+  color: var(--gold-light);
+  font-family: Georgia, serif;
+  margin: 0;
+  font-size: 1.7rem;
+}
+
+.section-head p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+/* STATISTIQUES */
+
+.bond-stats {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: linear-gradient(145deg, #263548, #172230);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: .68rem;
+  letter-spacing: .1em;
+}
+
+.stat-card strong {
+  color: var(--gold);
+  font-family: Georgia, serif;
+  font-size: 1.8rem;
+}
+
+/* BARRE DE RECHERCHE */
+
+.toolbar {
+  position: relative;
+  z-index: 1;
+  margin: 20px 0;
+}
+
+.search {
+  display: block;
+  width: 100%;
+  padding: 13px 16px;
+  color: var(--text);
+  background: #0d1724;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.search.compact {
+  margin-bottom: 20px;
+}
+
+.search:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(215, 185, 121, .08);
+}
+
+.search::placeholder {
+  color: #718094;
+}
+
+/* BOUTONS */
+
+.primary {
+  padding: 11px 18px;
+  color: #171b21;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  font-weight: 700;
+  transition: .2s;
+  box-shadow: 0 0 15px rgba(215, 185, 121, .08);
+}
+
+.primary:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 18px rgba(215, 185, 121, .2);
+  transform: translateY(-1px);
+}
+
+.ghost {
+  padding: 9px 15px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.ghost:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.small-btn {
+  padding: 6px 10px;
+  color: var(--muted);
+  background: #111d2b;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  transition: .2s;
+}
+
+.small-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+/* CARTES SERVANTS */
+
+#servantList,
+#farmList {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.servant {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px;
+  background: linear-gradient(110deg, #1d2d40, #172536);
+  border: 1px solid rgba(150, 170, 195, .16);
+  border-radius: 8px;
+  transition: border-color .2s, background .2s;
+}
+
+.servant:hover {
+  border-color: rgba(215, 185, 121, .5);
+  background: #263447;
+}
+
+.servant.done {
+  border-color: #344253;
+  filter: saturate(.65);
+  opacity: .75;
+}
+
+/* CLASSES */
+
+.class-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.class-symbol {
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+/* PRIORITÉS */
+
+.priority-indicator {
+  min-width: 40px;
+  padding: 5px 8px;
+  color: var(--gold);
+  background: rgba(215, 185, 121, .08);
+  border: 1px solid rgba(215, 185, 121, .4);
+  border-radius: 6px;
+  font-size: .8rem;
+  text-align: center;
+}
+
+/* CARTES FARM */
+
+.farm-item {
+  padding: 15px;
+  background: linear-gradient(110deg, #1d2d40, #172536);
+  border: 1px solid rgba(150, 170, 195, .16);
+  border-radius: 8px;
+}
+
+.farm-item:hover {
+  border-color: var(--border);
+}
+
+.farm-item h3 {
+  margin: 0 0 8px;
+  color: var(--gold-light);
+}
+
+.farm-item p {
+  margin: 4px 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+/* FENÊTRE D'AJOUT */
+
+dialog {
+  width: min(430px, 92%);
+  padding: 25px;
+  color: var(--text);
+  background: #172536;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, .6);
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, .75);
+  backdrop-filter: blur(4px);
+}
+
+dialog h3 {
+  margin-top: 0;
+  color: var(--gold-light);
+  font-family: Georgia, serif;
+}
+
+dialog label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 15px 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+dialog input {
+  width: 100%;
+  padding: 11px;
+  color: var(--text);
+  background: #0d1724;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  outline: none;
+}
+
+dialog input:focus {
+  border-color: var(--gold);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* PIED DE PAGE */
+
+footer {
+  padding: 25px 15px;
+  color: var(--muted);
+  font-size: .8rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 45px 15px;
+  }
+
+  main {
+    width: 94%;
+    margin: 20px auto;
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .section-head {
+    align-items: flex-start;
+  }
+
+  .section-head h2 {
+    font-size: 1.4rem;
+  }
+
+  .bond-stats {
+    gap: 6px;
+  }
+
+  .stat-card {
+    padding: 10px;
+  }
+
+  .stat-label {
+    font-size: .58rem;
+  }
+
+  .stat-card strong {
+    font-size: 1.35rem;
+  }
+
+  .servant {
+    flex-wrap: wrap;
+  }
+
+  .tabs {
+    gap: 8px;
+  }
+
+  .tab {
+    padding: 9px 18px;
+  }
+}
