@@ -88,6 +88,157 @@
     </form>
   </dialog>
 
+/* ===== CHALDEA UI ===== */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, #101925, #172638 70%, transparent);
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border: 1px solid rgba(215, 185, 121, .15);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.hero::before {
+  top: -90px;
+  left: -70px;
+}
+
+.hero::after {
+  bottom: -90px;
+  right: -70px;
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: "CHALDEA";
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  color: rgba(215, 185, 121, .05);
+  font-size: 3rem;
+  font-family: Georgia, serif;
+  letter-spacing: .2em;
+  pointer-events: none;
+}
+
+/* Compteur */
+
+.bond-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, #263548, #172230);
+  border: 1px solid rgba(215, 185, 121, .25);
+  padding: 14px;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-label {
+  font-size: .68rem;
+  letter-spacing: .1em;
+  color: #9aa8b9;
+}
+
+.stat-card strong {
+  font-size: 1.7rem;
+  color: #d7b979;
+  font-family: Georgia, serif;
+}
+
+/* Classes */
+
+.class-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.class-symbol {
+  font-size: 1rem;
+  color: #d7b979;
+}
+
+/* Priorités */
+
+.priority-indicator {
+  color: #d7b979;
+  border: 1px solid rgba(215, 185, 121, .4);
+  background: rgba(215, 185, 121, .08);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: .8rem;
+  min-width: 40px;
+  text-align: center;
+}
+
+.servant.done {
+  border-color: #344253;
+  filter: saturate(.65);
+}
+
+/* Finition */
+
+.servant {
+  transition: border-color .2s, background .2s;
+}
+
+.servant:hover {
+  border-color: rgba(215, 185, 121, .5);
+  background: #263447;
+}
+
+.primary {
+  box-shadow: 0 0 15px rgba(215, 185, 121, .08);
+}
+
+.primary:hover {
+  box-shadow: 0 0 18px rgba(215, 185, 121, .2);
+}
+
+.small-btn:hover {
+  border-color: #d7b979;
+  color: #d7b979;
+}
+
+@media(max-width: 600px) {
+  .bond-stats {
+    gap: 6px;
+  }
+
+  .stat-card {
+    padding: 10px;
+  }
+
+  .stat-label {
+    font-size: .58rem;
+  }
+
+  .stat-card strong {
+    font-size: 1.35rem;
+  }
+}
+
   <footer>
     Fan-made helper · données sauvegardées dans ton navigateur
   </footer>
