@@ -1,16 +1,14 @@
 
-/* =========================================
-   FATE / GRAND ORDER — CHALDEA INTERFACE
-   Compatible avec fgo.html
-========================================= */
-
-/* VARIABLES */
+/* ==========================================
+   FATE / GRAND ORDER — CHALDEA UI
+   Pour fgo.html
+========================================== */
 
 :root {
   --bg: #0b111b;
-  --bg-light: #111d2b;
+  --bg2: #111d2b;
   --panel: #172536;
-  --panel-light: #223449;
+  --panel2: #223449;
   --gold: #d7b979;
   --gold-light: #f0dca8;
   --text: #e7edf5;
@@ -18,8 +16,6 @@
   --border: rgba(215, 185, 121, .25);
   --danger: #bd7373;
 }
-
-/* BASE */
 
 * {
   box-sizing: border-box;
@@ -32,10 +28,10 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top, #1b2b40 0%, transparent 45%),
-    var(--bg);
   color: var(--text);
+  background:
+    radial-gradient(ellipse at top, #1b2b40 0%, transparent 48%),
+    var(--bg);
   font-family: "Segoe UI", Arial, sans-serif;
   line-height: 1.5;
 }
@@ -54,14 +50,9 @@ button {
 .hero {
   position: relative;
   overflow: hidden;
-  text-align: center;
   padding: 65px 20px 55px;
-  background: linear-gradient(
-    180deg,
-    #101925,
-    #172638 75%,
-    transparent
-  );
+  text-align: center;
+  background: linear-gradient(180deg, #101925, #172638 75%, transparent);
   border-bottom: 1px solid var(--border);
 }
 
@@ -82,15 +73,15 @@ button {
 }
 
 .hero::after {
-  bottom: -100px;
   right: -60px;
+  bottom: -100px;
 }
 
 .eyebrow {
+  margin-bottom: 12px;
   color: var(--gold);
   font-size: .75rem;
   letter-spacing: .3em;
-  margin-bottom: 12px;
 }
 
 .hero h1 {
@@ -102,11 +93,11 @@ button {
 }
 
 .hero p {
-  color: var(--muted);
   margin: 12px 0 0;
+  color: var(--muted);
 }
 
-/* NAVIGATION */
+/* ONGLETS */
 
 .tabs {
   display: flex;
@@ -132,7 +123,7 @@ button {
   border-color: var(--gold);
 }
 
-/* CONTENU */
+/* STRUCTURE */
 
 main {
   width: min(1100px, 92%);
@@ -140,11 +131,11 @@ main {
 }
 
 .panel {
-  display: none;
   position: relative;
+  display: none;
   overflow: hidden;
   padding: 25px;
-  background: rgba(17, 29, 43, .92);
+  background: rgba(17, 29, 43, .94);
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 12px 35px rgba(0, 0, 0, .2);
@@ -166,8 +157,6 @@ main {
   pointer-events: none;
 }
 
-/* TITRES DE SECTION */
-
 .section-head {
   position: relative;
   z-index: 1;
@@ -179,9 +168,9 @@ main {
 }
 
 .section-head h2 {
+  margin: 0;
   color: var(--gold-light);
   font-family: Georgia, serif;
-  margin: 0;
   font-size: 1.7rem;
 }
 
@@ -197,7 +186,7 @@ main {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin: 22px 0;
 }
@@ -224,7 +213,7 @@ main {
   font-size: 1.8rem;
 }
 
-/* BARRE DE RECHERCHE */
+/* RECHERCHE */
 
 .toolbar {
   position: relative;
@@ -233,6 +222,8 @@ main {
 }
 
 .search {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   padding: 13px 16px;
@@ -241,7 +232,7 @@ main {
   border: 1px solid var(--border);
   border-radius: 7px;
   outline: none;
-  transition: border-color .2s, box-shadow .2s;
+  transition: .2s;
 }
 
 .search.compact {
@@ -266,8 +257,8 @@ main {
   border: 1px solid var(--gold);
   border-radius: 6px;
   font-weight: 700;
-  transition: .2s;
   box-shadow: 0 0 15px rgba(215, 185, 121, .08);
+  transition: .2s;
 }
 
 .primary:hover {
@@ -290,6 +281,7 @@ main {
 }
 
 .small-btn {
+  min-width: 34px;
   padding: 6px 10px;
   color: var(--muted);
   background: #111d2b;
@@ -303,7 +295,7 @@ main {
   border-color: var(--gold);
 }
 
-/* CARTES SERVANTS */
+/* LISTES */
 
 #servantList,
 #farmList {
@@ -314,21 +306,24 @@ main {
   gap: 10px;
 }
 
+/* SERVANTS */
+
 .servant {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 15px;
   background: linear-gradient(110deg, #1d2d40, #172536);
   border: 1px solid rgba(150, 170, 195, .16);
   border-radius: 8px;
-  transition: border-color .2s, background .2s;
+  transition: .2s;
 }
 
 .servant:hover {
-  border-color: rgba(215, 185, 121, .5);
   background: #263447;
+  border-color: rgba(215, 185, 121, .5);
 }
 
 .servant.done {
@@ -337,7 +332,11 @@ main {
   opacity: .75;
 }
 
-/* CLASSES */
+.servant .name {
+  flex: 1 1 150px;
+  color: var(--gold-light);
+  font-weight: 600;
+}
 
 .class-tag {
   display: inline-flex;
@@ -351,8 +350,6 @@ main {
   font-size: 1rem;
 }
 
-/* PRIORITÉS */
-
 .priority-indicator {
   min-width: 40px;
   padding: 5px 8px;
@@ -364,28 +361,87 @@ main {
   text-align: center;
 }
 
-/* CARTES FARM */
+.servant label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: .85rem;
+}
 
-.farm-item {
+.servant input[type="text"] {
+  width: 75px;
+  padding: 6px;
+  color: var(--text);
+  background: #0d1724;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.servant input[type="checkbox"] {
+  accent-color: var(--gold);
+}
+
+/* FARM : classes réellement utilisées par fgo.js */
+
+.farm-entry {
   padding: 15px;
   background: linear-gradient(110deg, #1d2d40, #172536);
   border: 1px solid rgba(150, 170, 195, .16);
   border-radius: 8px;
+  transition: .2s;
 }
 
-.farm-item:hover {
+.farm-entry:hover {
+  background: #263447;
   border-color: var(--border);
 }
 
-.farm-item h3 {
-  margin: 0 0 8px;
-  color: var(--gold-light);
+.farm-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.farm-item p {
-  margin: 4px 0;
+.farm-top strong {
+  color: var(--gold-light);
+  font-size: 1rem;
+}
+
+.drop {
+  flex-shrink: 0;
+  padding: 4px 9px;
+  color: var(--gold);
+  background: rgba(215, 185, 121, .08);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: .8rem;
+}
+
+.farm-meta {
+  margin-top: 8px;
   color: var(--muted);
-  font-size: .9rem;
+  font-size: .88rem;
+  overflow-wrap: anywhere;
+}
+
+/* MESSAGES */
+
+.empty,
+.error-message,
+.loading-message {
+  padding: 18px;
+  color: var(--muted);
+  text-align: center;
+  background: rgba(13, 23, 36, .7);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+.error-message {
+  color: #e5a0a0;
+  border-color: rgba(189, 115, 115, .5);
 }
 
 /* FENÊTRE D'AJOUT */
@@ -441,7 +497,7 @@ dialog input:focus {
   margin-top: 20px;
 }
 
-/* PIED DE PAGE */
+/* FOOTER */
 
 footer {
   padding: 25px 15px;
@@ -451,7 +507,7 @@ footer {
   border-top: 1px solid var(--border);
 }
 
-/* RESPONSIVE */
+/* MOBILE */
 
 @media (max-width: 600px) {
   .hero {
@@ -492,7 +548,11 @@ footer {
   }
 
   .servant {
-    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .farm-top {
+    align-items: flex-start;
   }
 
   .tabs {
