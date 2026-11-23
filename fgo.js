@@ -1,17 +1,27 @@
 
+/* ==========================================
+   FATE / GRAND ORDER — CHALDEA HELPER
+   Compatible avec fgo.html et fgo.css
+========================================== */
+
 const $ = selector => document.querySelector(selector);
+
+const STORAGE_KEY = "fgo-servants-v1";
 
 let servants = [];
 let farm = [];
 
-const STORAGE_KEY = "fgo-servants-v1";
+/* ==========================================
+   OUTILS
+========================================== */
 
-// ==========================================
-// SAUVEGARDE
-// ==========================================
+function createId() {
+  if (crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
 
-function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(servants));
+  return "servant-" + Date.now() + "-" +
+    Math.random().toString(16).slice(2);
 }
 
 function escapeHTML(value) {
@@ -21,12 +31,25 @@ function escapeHTML(value) {
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
-  }[char]));
+  })[char]);
 }
 
-// ==========================================
-// SYMBOLES DES CLASSES FGO
-// ==========================================
+function normalizeText(value) {
+  return String(value ?? "").toLocaleLowerCase("fr");
+}
+
+function saveServants() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(servants));
+  } catch (error) {
+    console.error("Erreur de sauvegarde :", error);
+    alert("Impossible de sauvegarder les servants dans ce navigateur.");
+  }
+}
+
+/* ==========================================
+   SYMBOLES DES CLASSES
+========================================== */
 
 function getClassSymbol(classe) {
   const symbols = {
@@ -38,7 +61,7 @@ function getClassSymbol(classe) {
     Assassin: "☾",
     Berserker: "✹",
     Ruler: "♜",
-    Avenger: "☠",
+    Avenger: "◇",
     Alterego: "◇",
     "Alter Ego": "◇",
     MoonCancer: "☽",
@@ -52,424 +75,413 @@ function getClassSymbol(classe) {
   return symbols[classe] || "✦";
 }
 
-// ==========================================
-// TRI DES SERVANTS
-// ==========================================
+/* ==========================================
+   TRI DES SERVANTS
+========================================== */
 
 function sortServants(a, b) {
-
   // Bond Max toujours en dernier
-  if (a.bondMax !== b.bondMax) {
+  if (Boolean(a.bondMax) !== Boolean(b.bondMax)) {
     return a.bondMax ? 1 : -1;
   }
 
-  const pa = parseFloat(a.priority);
-  const pb = parseFloat(b.priority);
+  const pa = Number(a.priority);
+  const pb = Number(b.priority);
 
-  const validA = Number.isFinite(pa);
-  const validB = Number.isFinite(pb);
+  const validA = a.priority !== "" && Number.isFinite(pa);
+  const validB = b.priority !== "" && Number.isFinite(pb);
 
-  // Servants avec priorité avant ceux sans priorité
+  // Les priorités renseignées passent avant les vides
   if (validA !== validB) {
     return validA ? -1 : 1;
   }
 
-  // Priorité 1 avant priorité 2, etc.
+  // Priorité la plus petite en premier
   if (validA && pa !== pb) {
     return pa - pb;
   }
 
-  return a.name.localeCompare(b.name);
+  return String(a.name).localeCompare(String(b.name), "fr");
 }
 
-// ==========================================
-// AFFICHAGE BOND LEVEL
-// ==========================================
+/* ==========================================
+   AFFICHAGE DES COMPTEURS
+========================================== */
 
-function renderBond() {
-
-  const query = $("#bondSearch").value.toLowerCase();
-
-  const list = servants
-    .slice()
-    .sort(sortServants)
-    .filter(s =>
-      (s.name + " " + s.classe + " " + s.priority)
-        .toLowerCase()
-        .includes(query)
-    );
-
-  // COMPTEURS
+function renderStats() {
   const total = servants.length;
-
   const max = servants.filter(s => s.bondMax).length;
-
   const active = total - max;
 
   $("#totalCount").textContent = total;
   $("#activeCount").textContent = active;
   $("#maxCount").textContent = max;
+}
 
-  // LISTE DES SERVANTS
+/* ==========================================
+   AFFICHAGE BOND LEVEL
+========================================== */
+
+function renderBond() {
+  const searchInput = $("#bondSearch");
+  const query = normalizeText(searchInput?.value);
+
+  const list = servants
+    .slice()
+    .sort(sortServants)
+    .filter(servant => {
+      const searchable = [
+        servant.name,
+        servant.classe,
+        servant.priority
+      ].join(" ");
+
+      return normalizeText(searchable).includes(query);
+    });
+
+  renderStats();
+
   $("#servantList").innerHTML = list.length
-
-    ? list.map(s => `
-      <article class="servant ${s.bondMax ? "done" : ""}">
+    ? list.map(servant => `
+      <article class="servant ${servant.bondMax ? "done" : ""}">
 
         <span class="name">
-          ${escapeHTML(s.name)}
+          ${escapeHTML(servant.name)}
         </span>
 
         <span class="class-tag">
           <span class="class-symbol">
-            ${getClassSymbol(s.classe)}
+            ${getClassSymbol(servant.classe)}
           </span>
-
-          ${escapeHTML(s.classe || "Classe ?")}
+          ${escapeHTML(servant.classe || "Classe inconnue")}
         </span>
 
-        ${
-          s.priority
-            ? `
-              <span class="priority-indicator">
-                P${escapeHTML(s.priority)}
-              </span>
-            `
-            : ""
-        }
+        <span class="priority-indicator">
+          ${servant.priority !== ""
+            ? "P" + escapeHTML(servant.priority)
+            : "—"}
+        </span>
 
         <label>
           Priorité
-
           <input
             type="text"
-            value="${escapeHTML(s.priority || "")}"
-            data-priority="${escapeHTML(s.id)}"
-            placeholder="—"
-            style="width:85px"
+            inputmode="numeric"
+            value="${escapeHTML(servant.priority)}"
+            data-priority="${escapeHTML(servant.id)}"
+            aria-label="Priorité de ${escapeHTML(servant.name)}"
           >
         </label>
 
         <label class="bond">
           <input
             type="checkbox"
-            data-bond="${escapeHTML(s.id)}"
-            ${s.bondMax ? "checked" : ""}
+            data-bond="${escapeHTML(servant.id)}"
+            ${servant.bondMax ? "checked" : ""}
           >
-
-          Bond max
+          Bond Max
         </label>
 
         <button
+          type="button"
           class="small-btn"
-          data-delete="${escapeHTML(s.id)}"
-          title="Supprimer"
+          data-delete="${escapeHTML(servant.id)}"
+          title="Supprimer ce servant"
+          aria-label="Supprimer ${escapeHTML(servant.name)}"
         >
           ×
         </button>
 
       </article>
     `).join("")
-
     : '<p class="empty">Aucun servant trouvé.</p>';
 }
 
-// ==========================================
-// AFFICHAGE FARM
-// ==========================================
+/* ==========================================
+   AFFICHAGE FARM
+========================================== */
 
 function renderFarm() {
+  const query = normalizeText($("#farmSearch")?.value);
 
-  const query = $("#farmSearch").value.toLowerCase();
+  const list = farm.filter(item => {
+    const searchable = [
+      item.material,
+      item.area,
+      item.mission,
+      item.node,
+      item.code
+    ].join(" ");
 
-  const list = farm.filter(item =>
-    (
-      item.material +
-      " " +
-      item.area +
-      " " +
-      item.mission +
-      " " +
-      item.node
-    ).toLowerCase().includes(query)
-  );
+    return normalizeText(searchable).includes(query);
+  });
 
   $("#farmList").innerHTML = list.length
-
     ? list.map(item => `
       <article class="farm-entry">
 
         <div class="farm-top">
-
-          <strong>
-            ${escapeHTML(item.material)}
-          </strong>
+          <strong>${escapeHTML(item.material || "Matériau inconnu")}</strong>
 
           <span class="drop">
-            ${
-              item.dropRate == null
-                ? "Drop inconnu"
-                : escapeHTML(item.dropRate) + " %"
-            }
+            ${item.dropRate === null || item.dropRate === undefined || item.dropRate === ""
+              ? "Drop inconnu"
+              : escapeHTML(item.dropRate) + " %"}
           </span>
-
         </div>
 
         <div class="farm-meta">
-          ${escapeHTML(item.area)}
-          · ${escapeHTML(item.node)}
-          · ${escapeHTML(item.mission)}
+          ${escapeHTML(item.area || "Lieu inconnu")}
+          · ${escapeHTML(item.node || "Zone inconnue")}
+          · ${escapeHTML(item.mission || "Mission inconnue")}
         </div>
 
       </article>
     `).join("")
-
     : '<p class="empty">Aucun matériau trouvé.</p>';
 }
 
-// ==========================================
-// NAVIGATION ENTRE LES ONGLETS
-// ==========================================
+/* ==========================================
+   NAVIGATION ENTRE LES ONGLETS
+========================================== */
 
 document.querySelectorAll(".tab").forEach(button => {
-
   button.addEventListener("click", () => {
+    const target = button.dataset.tab;
 
-    document.querySelectorAll(".tab, .panel")
-      .forEach(element => element.classList.remove("active"));
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.classList.toggle("active", tab === button);
+    });
 
-    button.classList.add("active");
-
-    $("#" + button.dataset.tab).classList.add("active");
-
+    document.querySelectorAll(".panel").forEach(panel => {
+      panel.classList.toggle("active", panel.id === target);
+    });
   });
-
 });
 
-// ==========================================
-// RECHERCHE
-// ==========================================
+/* ==========================================
+   RECHERCHE
+========================================== */
 
 $("#bondSearch").addEventListener("input", renderBond);
-
 $("#farmSearch").addEventListener("input", renderFarm);
 
-// ==========================================
-// BOND MAX
-// ==========================================
+/* ==========================================
+   MODIFICATION DU BOND MAX
+========================================== */
 
 $("#servantList").addEventListener("change", event => {
-
   const id = event.target.dataset.bond;
 
   if (!id) return;
 
   const servant = servants.find(s => s.id === id);
-
   if (!servant) return;
 
   servant.bondMax = event.target.checked;
 
-  save();
-
-  // Actualise la liste et les compteurs
+  saveServants();
   renderBond();
-
 });
 
-// ==========================================
-// MODIFICATION DE LA PRIORITÉ
-// ==========================================
+/* ==========================================
+   MODIFICATION DES PRIORITÉS
+========================================== */
 
 $("#servantList").addEventListener("input", event => {
-
   const id = event.target.dataset.priority;
 
   if (!id) return;
 
   const servant = servants.find(s => s.id === id);
+  if (!servant) return;
 
-  if (servant) {
+  servant.priority = event.target.value.trim();
 
-    servant.priority = event.target.value;
-
-    save();
-
-  }
-
+  saveServants();
 });
 
-// Re-tri quand on termine la saisie
 $("#servantList").addEventListener("focusout", event => {
-
   if (event.target.dataset.priority) {
-
     renderBond();
-
   }
-
 });
 
-// ==========================================
-// SUPPRESSION
-// ==========================================
+/* ==========================================
+   SUPPRESSION
+========================================== */
 
 $("#servantList").addEventListener("click", event => {
+  const button = event.target.closest("[data-delete]");
+  if (!button) return;
 
-  const id = event.target.dataset.delete;
-
-  if (!id) return;
-
+  const id = button.dataset.delete;
   const servant = servants.find(s => s.id === id);
 
   if (!servant) return;
 
-  if (confirm("Supprimer " + servant.name + " de la liste ?")) {
-
+  if (confirm(`Supprimer ${servant.name} de ta liste ?`)) {
     servants = servants.filter(s => s.id !== id);
 
-    save();
-
+    saveServants();
     renderBond();
-
   }
-
 });
 
-// ==========================================
-// AJOUT D'UN SERVANT
-// ==========================================
+/* ==========================================
+   AJOUT D'UN SERVANT
+========================================== */
 
 $("#addServant").addEventListener("click", () => {
-
   $("#servantDialog").showModal();
-
 });
 
 $("#cancelDialog").addEventListener("click", () => {
-
   $("#servantDialog").close();
-
 });
 
 $("#servantForm").addEventListener("submit", event => {
-
   event.preventDefault();
 
-  const form = new FormData(event.target);
+  const form = new FormData(event.currentTarget);
 
-  const name = form.get("name").trim();
+  const name = String(form.get("name") || "").trim();
+  const classe = String(form.get("classe") || "").trim();
+  const priority = String(form.get("priority") || "").trim();
 
   if (!name) return;
 
   servants.push({
-
-    id: crypto.randomUUID(),
-
-    name: name,
-
-    classe: form.get("classe").trim(),
-
-    priority: form.get("priority").trim(),
-
+    id: createId(),
+    name,
+    classe,
+    priority,
     bondMax: false
-
   });
 
-  save();
+  saveServants();
+
+  // Réinitialise la recherche pour afficher le nouveau servant
+  $("#bondSearch").value = "";
 
   renderBond();
-
   $("#servantDialog").close();
-
-  event.target.reset();
-
+  event.currentTarget.reset();
 });
 
-// ==========================================
-// INITIALISATION
-// ==========================================
+/* ==========================================
+   CHARGEMENT DES FICHIERS JSON
+========================================== */
 
-async function init() {
+async function loadJSON(filename) {
+  const response = await fetch(filename, {
+    cache: "no-store"
+  });
 
-  // Chargement des données FARM
+  if (!response.ok) {
+    throw new Error(
+      `${filename} introuvable (HTTP ${response.status})`
+    );
+  }
+
+  return response.json();
+}
+
+/* ==========================================
+   CHARGEMENT DES SERVANTS
+========================================== */
+
+async function loadServants() {
+  let stored = null;
+
   try {
-
-    farm = await fetch("./farm-data.json").then(r => {
-
-      if (!r.ok) {
-        throw new Error("Farm data indisponible");
-      }
-
-      return r.json();
-
-    });
-
-    renderFarm();
-
+    stored = localStorage.getItem(STORAGE_KEY);
   } catch (error) {
-
-    $("#farmList").innerHTML =
-      '<p class="empty">Impossible de charger farm-data.json</p>';
-
+    console.error("Lecture du stockage impossible :", error);
   }
 
-  // Chargement des servants
-  const stored = localStorage.getItem(STORAGE_KEY);
-
-  if (stored) {
-
+  if (stored !== null) {
     try {
+      const parsed = JSON.parse(stored);
 
-      servants = JSON.parse(stored);
-
-      if (!Array.isArray(servants)) {
-        throw new Error("Données invalides");
+      if (!Array.isArray(parsed)) {
+        throw new Error("La sauvegarde n'est pas une liste.");
       }
 
-    } catch {
-
+      servants = parsed;
+    } catch (error) {
+      console.error("Sauvegarde des servants invalide :", error);
       servants = [];
-
     }
-
   } else {
-
     try {
+      const defaults = await loadJSON("./servants-default.json");
 
-      servants = await fetch("./servants-default.json")
-        .then(r => r.json());
-
-      if (!Array.isArray(servants)) {
-        throw new Error("Liste invalide");
+      if (!Array.isArray(defaults)) {
+        throw new Error("servants-default.json doit contenir une liste.");
       }
 
-      save();
-
-    } catch {
-
+      servants = defaults;
+    } catch (error) {
+      console.error(error);
       servants = [];
-
     }
-
   }
 
-  // Ajout d'identifiants aux anciennes données
-  servants = servants.map(s => ({
-
-    ...s,
-
-    id: s.id || crypto.randomUUID(),
-
-    bondMax: Boolean(s.bondMax)
-
+  // Ajoute les identifiants manquants et normalise les données
+  servants = servants.map(servant => ({
+    id: servant.id || createId(),
+    name: String(servant.name || "Servant sans nom"),
+    classe: String(servant.classe || ""),
+    priority: String(servant.priority ?? ""),
+    bondMax: Boolean(servant.bondMax)
   }));
 
-  save();
+  saveServants();
+}
 
-  // Affichage initial
+/* ==========================================
+   CHARGEMENT DES MATÉRIAUX
+========================================== */
+
+async function loadFarm() {
+  $("#farmList").innerHTML =
+    '<p class="loading-message">Chargement des matériaux...</p>';
+
+  try {
+    const data = await loadJSON("./farm-data.json");
+
+    if (!Array.isArray(data)) {
+      throw new Error("farm-data.json doit contenir une liste.");
+    }
+
+    farm = data;
+    renderFarm();
+  } catch (error) {
+    console.error("Erreur de chargement du farm :", error);
+
+    farm = [];
+
+    $("#farmList").innerHTML = `
+      <p class="error-message">
+        Impossible de charger farm-data.json.
+        Vérifie que le fichier est dans le même dossier que fgo.html.
+      </p>
+    `;
+  }
+}
+
+/* ==========================================
+   INITIALISATION
+========================================== */
+
+async function init() {
+  await Promise.all([
+    loadServants(),
+    loadFarm()
+  ]);
+
   renderBond();
-
 }
 
 init();
