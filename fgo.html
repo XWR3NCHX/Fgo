@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -8,129 +7,108 @@
   <link rel="stylesheet" href="fgo.css">
 </head>
 <body>
-
   <header class="hero">
     <div class="eyebrow">CHALDEA • SUPPORT DATABASE</div>
     <h1>Fate / Grand Order</h1>
-    <p>Bond tracker &amp; matériaux de farm</p>
+    <p>Bond tracker, entraînement &amp; matériaux de farm</p>
   </header>
 
   <nav class="tabs">
     <button class="tab active" data-tab="bond" type="button">Bond Level</button>
-    <button class="tab" data-tab="farm" type="button">Farm</button>
+    <button class="tab" data-tab="training" type="button">Training Ground</button>
+    <button class="tab" data-tab="farm" type="button">Drops</button>
   </nav>
 
   <main>
-
-    <!-- BOND LEVEL -->
     <section id="bond" class="panel active">
-
       <div class="section-head">
         <div>
           <h2>Bond Level</h2>
           <p>Priorités en premier · Bond Max en bas</p>
         </div>
-
-        <button id="addServant" class="primary" type="button">
-          ＋ Ajouter
-        </button>
+        <button id="addServant" class="primary" type="button">＋ Ajouter</button>
       </div>
 
-      <!-- STATISTIQUES -->
       <div class="bond-stats" id="bondStats">
-        <div class="stat-card">
-          <span class="stat-label">TOTAL SERVANTS</span>
-          <strong id="totalCount">0</strong>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">BOND EN COURS</span>
-          <strong id="activeCount">0</strong>
-        </div>
-
-        <div class="stat-card">
-          <span class="stat-label">BOND MAX</span>
-          <strong id="maxCount">0</strong>
-        </div>
+        <div class="stat-card"><span class="stat-label">TOTAL SERVANTS</span><strong id="totalCount">0</strong></div>
+        <div class="stat-card"><span class="stat-label">BOND EN COURS</span><strong id="activeCount">0</strong></div>
+        <div class="stat-card"><span class="stat-label">BOND MAX</span><strong id="maxCount">0</strong></div>
       </div>
 
       <div class="toolbar">
-        <input
-          id="bondSearch"
-          type="search"
-          placeholder="Rechercher un servant..."
-          class="search"
-        >
+        <input id="bondSearch" type="search" placeholder="Rechercher un servant..." class="search">
       </div>
-
       <div id="servantList"></div>
-
     </section>
 
-    <!-- FARM -->
-    <section id="farm" class="panel">
-
+    <section id="training" class="panel">
       <div class="section-head">
         <div>
-          <h2>Farm</h2>
-          <p>Matériaux et missions associées</p>
+          <h2>Training Ground</h2>
+          <p>Planning hebdomadaire des entraînements et tableau des gemmes</p>
         </div>
       </div>
 
-      <input
-        id="farmSearch"
-        type="search"
-        placeholder="Rechercher un matériau, lieu ou mission..."
-        class="search compact"
-      >
+      <div class="training-section">
+        <h3>Planning de la semaine</h3>
+        <div class="training-week">
+          <article class="training-day"><h4>Lundi</h4><img src="assets/training-ground/training-ground-2.png" alt="Icône de classe du lundi"></article>
+          <article class="training-day"><h4>Mardi</h4><img src="assets/training-ground/training-ground-3.png" alt="Icône de classe du mardi"></article>
+          <article class="training-day"><h4>Mercredi</h4><img src="assets/training-ground/training-ground-4.png" alt="Icône de classe du mercredi"><span class="training-plus">+</span></article>
+          <article class="training-day"><h4>Jeudi</h4><img src="assets/training-ground/training-ground-5.png" alt="Icône de classe du jeudi"><span class="training-plus">+</span></article>
+          <article class="training-day"><h4>Vendredi</h4><img src="assets/training-ground/training-ground-9.png" alt="Icône de classe du vendredi"></article>
+          <article class="training-day"><h4>Samedi</h4><img src="assets/training-ground/training-ground-10.png" alt="Icône de classe du samedi"></article>
+          <article class="training-day"><h4>Dimanche</h4><img src="assets/training-ground/training-ground-11.png" alt="Icône de classe du dimanche"></article>
+        </div>
+        <p class="training-note">Le symbole « + » est conservé pour le mercredi et le jeudi, comme indiqué dans le tableau Excel.</p>
+      </div>
 
-      <div id="farmList"></div>
-
+      <div class="training-section">
+        <h3>Gemmes par rareté</h3>
+        <div class="gem-grid">
+          <article class="gem-card">
+            <img src="assets/training-ground/training-ground-6.png" alt="Gemmes bleues">
+            <h4>Gemmes bleues</h4>
+            <div class="gem-values"><span>★ 1 : 18</span><span>★★ 2 : 27</span><span>★★★ 3 : 36</span><span>★★★★ 4 : 42</span><span>★★★★★ 5 : 51</span></div>
+          </article>
+          <article class="gem-card">
+            <img src="assets/training-ground/training-ground-7.png" alt="Gemmes rouges">
+            <h4>Gemmes rouges</h4>
+            <div class="gem-values"><span>★ 1 : 18</span><span>★★ 2 : 27</span><span>★★★ 3 : 36</span><span>★★★★ 4 : 42</span><span>★★★★★ 5 : 51</span></div>
+          </article>
+          <article class="gem-card">
+            <img src="assets/training-ground/training-ground-8.png" alt="Gemmes dorées">
+            <h4>Gemmes dorées</h4>
+            <div class="gem-values"><span>★ 1 : 18</span><span>★★ 2 : 27</span><span>★★★ 3 : 36</span><span>★★★★ 4 : 42</span><span>★★★★★ 5 : 51</span></div>
+          </article>
+        </div>
+      </div>
+      <p class="training-source">Données reprises de la feuille « TRAINING GROUND » du classeur fourni.</p>
     </section>
 
+    <section id="farm" class="panel">
+      <div class="section-head">
+        <div><h2>Drops</h2><p>Matériaux et missions associées</p></div>
+      </div>
+      <input id="farmSearch" type="search" placeholder="Rechercher un matériau, lieu ou mission..." class="search compact">
+      <div id="farmList"></div>
+    </section>
   </main>
 
-  <!-- AJOUT SERVANT -->
   <dialog id="servantDialog">
     <form id="servantForm">
       <h3>Ajouter un servant</h3>
-
-      <label>
-        Nom
-        <input name="name" type="text" required>
-      </label>
-
-      <label>
-        Classe
-        <input name="classe" type="text" placeholder="Saber, Archer...">
-      </label>
-
-      <label>
-        Priorité
-        <input
-          name="priority"
-          type="number"
-          min="1"
-          placeholder="1 = priorité haute"
-        >
-      </label>
-
+      <label>Nom<input name="name" type="text" required></label>
+      <label>Classe<input name="classe" type="text" placeholder="Saber, Archer..."></label>
+      <label>Priorité<input name="priority" type="number" min="1" placeholder="1 = priorité haute"></label>
       <div class="dialog-actions">
-        <button type="button" id="cancelDialog" class="ghost">
-          Annuler
-        </button>
-
-        <button type="submit" class="primary">
-          Ajouter
-        </button>
+        <button type="button" id="cancelDialog" class="ghost">Annuler</button>
+        <button type="submit" class="primary">Ajouter</button>
       </div>
     </form>
   </dialog>
 
-  <footer>
-    Fan-made helper · données sauvegardées dans ton navigateur
-  </footer>
-
+  <footer>Fan-made helper · données sauvegardées dans ton navigateur</footer>
   <script src="fgo.js"></script>
 </body>
 </html>

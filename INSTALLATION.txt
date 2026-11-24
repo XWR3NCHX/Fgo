@@ -1,0 +1,9 @@
+MISE À JOUR FGO — TRAINING GROUND
+
+1. Remplace fgo.html, fgo.css et fgo.js par ceux de ce dossier.
+2. Copie le dossier assets/training-ground dans le dossier assets de ton dépôt (ou garde le dossier assets complet fourni ici).
+3. Conserve tes fichiers farm-data.json et servants-default.json actuels : ils ne sont pas modifiés.
+4. Le nouvel onglet Training Ground est placé entre Bond Level et Drops.
+
+Les 13 images de la feuille Excel TRAINING GROUND ont été extraites sans modification.
+Les quantités de gemmes affichées reprennent les valeurs visibles dans les colonnes 1 à 5 du classeur.
