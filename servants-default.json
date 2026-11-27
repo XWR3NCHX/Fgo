@@ -1,4 +1,3 @@
-
 [
   {
     "id": "servant-001",
@@ -13,5 +12,173 @@
     "classe": "Saber",
     "priority": "2",
     "bondMax": false
+  },
+  {
+    "id": "servant-003",
+    "name": "Hassan Hundred Persona",
+    "classe": "Assassin",
+    "priority": "1",
+    "bondMax": false
+  },
+  {
+    "id": "servant-004",
+    "name": "Bedivere",
+    "classe": "Saber",
+    "priority": "en attente",
+    "bondMax": false
+  },
+  {
+    "id": "servant-005",
+    "name": "Ptolémée",
+    "classe": "Archer",
+    "priority": "en attente",
+    "bondMax": false
+  },
+  {
+    "id": "servant-006",
+    "name": "Boudica",
+    "classe": "Rider",
+    "priority": "en attente",
+    "bondMax": false
+  },
+  {
+    "id": "servant-007",
+    "name": "Hector",
+    "classe": "Lancer",
+    "priority": "en attente",
+    "bondMax": false
+  },
+  {
+    "id": "servant-008",
+    "name": "Richard 1er",
+    "classe": "Saber",
+    "priority": "en attente",
+    "bondMax": false
+  },
+  {
+    "id": "servant-009",
+    "name": "Britomart",
+    "classe": "Lancer",
+    "priority": "en attente",
+    "bondMax": false
+  },
+  {
+    "id": "servant-010",
+    "name": "Gray",
+    "classe": "Assassin",
+    "priority": "en attente",
+    "bondMax": false
+  },
+  {
+    "id": "servant-011",
+    "name": "Caligula",
+    "classe": "Berserker",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-012",
+    "name": "Hassan of Shining Star",
+    "classe": "Assassin",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-013",
+    "name": "Ishtar",
+    "classe": "Rider",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-014",
+    "name": "Artoria Alter",
+    "classe": "Saber",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-015",
+    "name": "Hassan Cursed Arm",
+    "classe": "Assassin",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-016",
+    "name": "Tenochtitlan",
+    "classe": "Pretender",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-017",
+    "name": "Emiya",
+    "classe": "Archer",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-018",
+    "name": "Muramasa",
+    "classe": "Saber",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-019",
+    "name": "Mordred",
+    "classe": "Saber",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-020",
+    "name": "Ishtar",
+    "classe": "Archer",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-021",
+    "name": "Space Ishtar",
+    "classe": "Avenger",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-022",
+    "name": "Heracles",
+    "classe": "Berserker",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-023",
+    "name": "First Hassan",
+    "classe": "Assassin",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-024",
+    "name": "Ereshkigal",
+    "classe": "Lancer",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-025",
+    "name": "Achille",
+    "classe": "Rider",
+    "priority": "max",
+    "bondMax": true
+  },
+  {
+    "id": "servant-026",
+    "name": "Angra Manyu",
+    "classe": "Avenger",
+    "priority": "max",
+    "bondMax": true
   }
 ]
