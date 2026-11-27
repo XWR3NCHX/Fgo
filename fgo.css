@@ -27,6 +27,26 @@ button { cursor: pointer; }
   background: linear-gradient(180deg, #101925, #172638 75%, transparent);
   border-bottom: 1px solid var(--border);
 }
+/* Logo Fate / Grand Order */
+.fgo-brand-mark {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(215, 185, 121, .55);
+  border-radius: 50%;
+  background: radial-gradient(circle, #d7b97920, transparent 70%);
+  box-shadow: 0 0 30px rgba(215, 185, 121, .15);
+}
+
+.fgo-brand-mark span {
+  color: var(--gold-light);
+  font-family: Georgia, serif;
+  font-size: 4.5rem;
+  text-shadow: 0 0 25px rgba(215, 185, 121, .6);
+  line-height: 1;
+}
 .hero::before, .hero::after {
   content: ""; position: absolute; width: 150px; height: 150px;
   border: 1px solid rgba(215, 185, 121, .16); transform: rotate(45deg); pointer-events: none;
