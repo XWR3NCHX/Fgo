@@ -95,6 +95,17 @@ footer { padding: 25px 15px; color: var(--muted); font-size: .8rem; text-align: 
 .training-day { min-height: 125px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 12px 6px; background: linear-gradient(145deg, #263548, #172230); border: 1px solid var(--border); border-radius: 9px; }
 .training-day h4 { margin: 0; color: var(--muted); font-size: .82rem; text-transform: capitalize; }
 .training-day img { width: 40px; height: 40px; object-fit: contain; image-rendering: auto; }
+/* Images supplémentaires du mercredi et jeudi */
+.training-day .training-plus {
+  margin: 2px 0;
+}
+
+.training-day img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: auto;
+}
 .training-plus { color: var(--gold); font-weight: 800; font-size: 1.1rem; line-height: 1; }
 .training-note, .training-source { color: var(--muted); font-size: .82rem; }
 .gem-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
