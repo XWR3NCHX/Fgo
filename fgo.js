@@ -170,26 +170,51 @@ async function loadJSON(filename) {
   return response.json();
 }
 
+
 async function loadServants() {
   let stored = null;
-  try { stored = localStorage.getItem(STORAGE_KEY); }
-  catch (error) { console.error("Lecture du stockage impossible :", error); }
-  if (stored !== null) {
-    try {
-      const parsed = JSON.parse(stored);
-      if (!Array.isArray(parsed)) throw new Error("La sauvegarde n'est pas une liste.");
-      servants = parsed;
-    } catch (error) {
-      console.error("Sauvegarde des servants invalide :", error);
-      servants = [];
+
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved !== null) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) stored = parsed;
     }
-  } else {
-    try {
-      const defaults = await loadJSON("./servants-default.json");
-      if (!Array.isArray(defaults)) throw new Error("servants-default.json doit contenir une liste.");
-      servants = defaults;
-    } catch (error) { console.error(error); servants = []; }
+  } catch (error) {
+    console.error("Sauvegarde des servants invalide :", error);
   }
+
+  try {
+    // Charger la liste officielle depuis le JSON
+    const defaults = await loadJSON("./servants-default.json");
+
+    if (!Array.isArray(defaults)) {
+      throw new Error("servants-default.json doit contenir une liste.");
+    }
+
+    if (stored !== null) {
+      // Conserver les modifications déjà faites dans le navigateur
+      const storedById = new Map(
+        stored.map(servant => [servant.id, servant])
+      );
+
+      const defaultIds = new Set(defaults.map(servant => servant.id));
+
+      // Ajouter les nouveaux servants sans perdre les anciennes données
+      servants = [
+        ...defaults.map(servant =>
+          storedById.get(servant.id) || servant
+        ),
+        ...stored.filter(servant => !defaultIds.has(servant.id))
+      ];
+    } else {
+      servants = defaults;
+    }
+  } catch (error) {
+    console.error("Erreur de chargement des servants :", error);
+    servants = stored || [];
+  }
+
   servants = servants.map(servant => ({
     id: servant.id || createId(),
     name: String(servant.name || "Servant sans nom"),
@@ -197,8 +222,10 @@ async function loadServants() {
     priority: String(servant.priority ?? ""),
     bondMax: Boolean(servant.bondMax)
   }));
+
   saveServants();
 }
+
 
 async function loadFarm() {
   $("#farmList").innerHTML = '<p class="loading-message">Chargement des matériaux...</p>';
